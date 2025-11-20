@@ -1,0 +1,4 @@
+hello there! i am going to start the top 150 interview question from leetcode,
+ I had already solved some question but i wasn't save it on the github and make the blog 
+ about that, so from now onward i will do it daily question and update the github
+ for this 150 question of the leet code...
