@@ -1,0 +1,36 @@
+Approach to Merge Two Sorted Arrays (nums1 and nums2)
+1. Create a new array to store the merged result
+
+We create an array merge of size m + n to hold the final sorted result.
+
+2. Use two pointers to compare elements
+
+size1 → pointer for nums1 (only the first m valid elements)
+
+size2 → pointer for nums2
+
+i → pointer for the merge array
+
+3. Compare elements from both arrays
+
+While both pointers are within bounds:
+
+If nums1[size1] is smaller or equal, copy it to merge.
+
+Otherwise, take the element from nums2.
+
+This step keeps the merged result sorted.
+
+4. Copy the remaining elements
+
+If any elements are left in either array:
+
+Copy leftover elements from nums1
+
+Copy leftover elements from nums2
+
+One of these loops will run, depending on which array still has elements.
+
+5. Copy merged array back to nums1
+
+Finally, copy all elements from merge[] into nums1[] so the result is stored in nums1.
