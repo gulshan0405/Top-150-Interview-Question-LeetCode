@@ -1,0 +1,92 @@
+Step-by-step explanation of your romanToInt code
+Goal
+
+Convert a Roman numeral string s into its integer value.
+
+Setup
+
+Create mapping
+Build a HashMap<Character,Integer> that maps each Roman character to its integer value:
+
+I -> 1, V -> 5, X -> 10, L -> 50, C -> 100, D -> 500, M -> 1000.
+
+Initialize accumulators
+
+int ans = 0; — running total that will become the final integer.
+
+int prev = 0; — value of the previously processed Roman character (initially 0).
+
+Main loop (process characters right → left)
+
+Loop from the end of the string to the start
+
+for (int i = s.length() - 1; i >= 0; i--) { ... }
+
+For each character ch = s.charAt(i):
+
+cur = h.get(ch); — look up the integer value for the current Roman symbol.
+
+Decide add or subtract
+
+If cur < prev → this current symbol is a subtractive notation (like I in IV), so subtract it from the total:
+
+if (cur < prev) ans -= cur;
+
+
+Otherwise (if cur >= prev) → add it to the total:
+
+else ans += cur;
+
+
+Update prev
+
+After processing cur, set prev = cur; so the next (left) character compares against the current one.
+
+End
+
+Return the accumulated result
+
+After the loop ends, ans holds the integer value for the whole Roman string. Return ans.
+
+Why scanning right → left works
+
+Roman numerals normally add values left-to-right, but when a smaller value is placed before a larger one it subtracts (e.g., IV = 5 - 1).
+
+By scanning from right to left we can decide locally whether to add or subtract each numeral by comparing with the previously seen value (prev).
+
+If current < previous → subtract (it was meant to subtract).
+
+If current >= previous → add.
+
+This removes the need to check every special subtractive pair (IV, IX, XL, etc.) explicitly.
+
+Example walkthrough: "MCMXCIV" → 1994
+
+Process characters right to left:
+
+V (5): prev=0 → 5 >= 0 → ans=5, prev=5
+
+I (1): 1 < 5 → subtract → ans=4, prev=1
+
+C (100): 100 >= 1 → add → ans=104, prev=100
+
+X (10): 10 < 100 → subtract → ans=94, prev=10
+
+M (1000): 1000 >= 10 → add → ans=1094, prev=1000
+
+C (100): 100 < 1000 → subtract → ans=994, prev=100
+
+M (1000): 1000 >= 100 → add → ans=1994, prev=1000
+Return 1994.
+
+Complexity
+
+Time: O(n) — single pass over the input string of length n.
+
+Space: O(1) extra — the map is constant-sized (7 entries); otherwise O(1).
+
+Small tips / micro-improvements
+
+You can make the map static/final to avoid recreating it on every call.
+
+For tiny speed gains, consider a switch or an array lookup if you want to avoid a HashMap (but current solution is perfectly fine and clear).
