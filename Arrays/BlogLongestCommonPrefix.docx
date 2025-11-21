@@ -1,0 +1,139 @@
+1) Your approach — step by step (character-by-character with fixed outer loop)
+
+Goal: build the prefix one character index j at a time by checking that every string has the same character at j.
+
+Handle trivial cases
+
+If strs.length == 0 return "".
+
+If strs.length == 1 return strs[0].
+
+Prepare
+
+prefix = ""
+
+Outer index j will track character position (your code uses for (int j = 0; j < 200; j++)).
+
+For each character position j (starting at 0)
+
+For each string index i from 1 to strs.length - 1:
+
+First check bounds:
+
+If j >= strs[i].length() or j >= strs[i-1].length() then at least one string ended. Return prefix because you cannot extend further.
+
+Then check characters:
+
+If strs[i].charAt(j) != strs[i-1].charAt(j), there is a mismatch. Return prefix.
+
+Otherwise continue to next i.
+
+If the inner loop completes (all pairs matched at j), append strs[0].charAt(j) to prefix.
+
+Move to next j.
+
+Stop conditions
+
+You return early whenever a string is too short for index j or a mismatch occurs.
+
+If j were to reach 200 (in your code) and nothing returned, the loop would stop and you return prefix.
+
+Example run with ["flower","flow","flight"]:
+
+j = 0: compare 'f' with 'f' etc. All match. prefix = "f".
+
+j = 1: compare 'l' with 'l' etc. All match. prefix = "fl".
+
+j = 2: compare 'o' vs 'o' (flower vs flow) OK, but compare 'o' vs 'i' (flow vs flight) mismatch -> return "fl".
+
+Time complexity
+
+Outer loop is written as a constant 200 so treated constant. Inner loop runs O(n) per j. Because j is effectively bounded by the shortest string before returning, worst-case if we ignore the hardcoded 200 it is O(n * m) where m is length of shortest string.
+
+With j limited to 200 it behaves like O(n) if you treat 200 as a strict constant. Practically use m instead.
+
+Space complexity
+
+O(1) extra space ignoring the returned prefix (or O(m) if you count the prefix).
+
+Pros
+
+Simple to reason about character-by-character.
+
+Stops early as soon as mismatch or a short string appears.
+
+Cons
+
+Hardcoded 200 is awkward and unnecessary.
+
+Slightly verbose checks and repeated bound checks between adjacent pairs instead of comparing to a single reference string.
+
+Appending to prefix with += repeatedly has cost; StringBuilder would be better for many appends.
+
+2) Optimal approach (horizontal scanning) — step by step
+
+Goal: keep a candidate prefix (initially the first string) and shrink it until every string starts with it.
+
+Handle trivial cases
+
+If strs.length == 0 return "".
+
+Initialize
+
+prefix = strs[0].
+
+For each string s starting from strs[1] to the end
+
+While s does not start with prefix:
+
+Shorten prefix by removing its last character: prefix = prefix.substring(0, prefix.length() - 1).
+
+If prefix becomes empty, return "" immediately.
+
+Continue to the next string once current s starts with prefix.
+
+After all strings are processed return prefix.
+
+Example run with ["flower","flow","flight"]:
+
+prefix = "flower".
+
+Compare strs[1] = "flow". "flow".startsWith("flower") false. Shrink prefix to "flowe", then "flow". Now "flow".startsWith("flow") true; move on.
+
+Compare strs[2] = "flight". "flight".startsWith("flow") false. Shrink "flow" -> "flo" -> "fl"; "flight".startsWith("fl") true.
+
+All strings processed. Return "fl".
+
+Time complexity
+
+Worst-case O(n * m) where:
+
+n = number of strings
+
+m = length of first string (in practice length of the common prefix or shortest string)
+
+Each substring operation reduces prefix length by 1 and each startsWith compares characters; overall work bounded by n * m.
+
+Space complexity
+
+O(1) extra (ignoring the returned string), though substring may create new strings depending on Java version. Using indices or StringBuilder avoids extra allocations but this simple version is OK.
+
+Pros
+
+Very concise and readable.
+
+Tends to perform well in practice because it shrinks the candidate quickly.
+
+No manual character loop or explicit bounds checks.
+
+Cons
+
+Uses repeated substring allocations; if you care about allocations use indices or StringBuilder.
+
+In worst-case (no common prefix) it may do many substring checks, but still the same O(n * m) bound.
+
+Quick recommendation
+
+Use the optimal horizontal scanning version for clarity and simplicity. If you want micro-optimizations, keep prefix as indices into the first string or use StringBuilder to avoid repeated string allocations.
+
+Remove the hardcoded 200 and rely on string lengths or this prefix-based approach.
