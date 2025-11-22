@@ -1,0 +1,100 @@
+Step-by-step approach
+1) Think of the array as “levels” of reach
+
+Each position tells you how far you can jump from there.
+You don’t need to explore everything.
+You only need to find the minimum number of jumps to reach the end.
+
+So you treat the array like this:
+
+A range [l, r] that represents all positions you can reach using the current number of jumps.
+
+From that range, you compute how far you can reach in the next jump.
+
+2) Initialize the first range
+
+You start at position 0, so:
+
+l = 0
+
+r = 0
+
+jump = 0
+
+This means:
+“With 0 jumps, I can only reach index 0.”
+
+3) Expand the range until it covers the end
+
+While the right boundary r is before the last index, keep jumping.
+
+while (r < n - 1)
+
+
+Each loop means you are taking one jump.
+
+4) For the current window [l, r], find the farthest you can reach
+
+Look at every index between l and r (all places reachable in the current number of jumps):
+
+for (int i = l; i <= r; i++) {
+    farthest = max(farthest, i + nums[i]);
+}
+
+
+i + nums[i] tells you:
+“How far can I jump if I start from index i?”
+
+Take the highest value. That becomes your next range’s right side.
+
+5) Move to the next range
+
+After the loop:
+
+Increase number of jumps:
+
+jump++
+
+
+Move your window to the next segment:
+
+l = r + 1        // start of next layer
+r = farthest     // end of next layer
+
+
+So one complete while-loop = one jump.
+
+6) Stop once your window covers the last index
+
+As soon as:
+
+r >= n - 1
+
+
+You have enough jumps to reach the end.
+
+Return jump.
+
+Summary in simple words
+
+Start with a window [l, r] that represents how far you can go with the current jump count.
+
+Use all indices inside this window to calculate how far you can reach in the next jump.
+
+Slide the window to the next range.
+
+Count the jump.
+
+Repeat until your range reaches the end.
+
+Why this works
+
+This is a level-by-level greedy strategy:
+
+Each window represents positions reachable with the same number of jumps.
+
+You explore only the current level.
+
+You expand to the next level with the minimum necessary jumps.
+
+This prevents extra work and avoids exploring unnecessary paths.
