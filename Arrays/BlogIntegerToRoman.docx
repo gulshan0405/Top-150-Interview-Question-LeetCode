@@ -1,0 +1,108 @@
+1) Prepare an ordered list of Roman symbols and values
+
+Use an ordered LinkedHashMap (or an ordered list of pairs) that preserves insertion order from largest value to smallest.
+
+Important correction: the subtractive form for 900 is "CM", not "DM".
+A correct order looks like: M (1000), CM (900), D (500), CD (400), C (100), XC (90), L (50), XL (40), X (10), IX (9), V (5), IV (4), I (1).
+
+2) Initialize variables
+
+Let n = num (the integer you want to convert).
+
+Let result = "" (an initially empty string to build the Roman numeral).
+
+Optionally: no need to keep a separate times variable outside the loop — compute it when needed.
+
+3) Iterate until the number is reduced to zero
+
+While n != 0, iterate over the ordered map entries from largest to smallest value.
+
+4) For each Roman entry (symbol, value) do:
+
+If n >= value:
+
+Compute how many times this symbol fits into n: times = n / value.
+(Integer division — number of repeats of the symbol.)
+
+Reduce n by removing those chunks: n = n % value.
+(Remainder after taking out times * value.)
+
+Append the symbol times times to result (e.g., loop times times and result += symbol).
+
+If n < value, move to the next (smaller) symbol.
+
+5) Finish and return
+
+When n becomes 0, the loop ends. result now holds the Roman numeral. Return it.
+
+Example walkthrough (using corrected map) — convert 1922
+
+Use the ordered symbols: M=1000, CM=900, D=500, CD=400, C=100, XC=90, L=50, XL=40, X=10, IX=9, V=5, IV=4, I=1.
+
+Start: n = 1922, result = "".
+
+Check M (1000):
+
+times = 1922 / 1000 = 1 (one thousand fits)
+
+n = 1922 % 1000 = 922
+
+append "M" → result = "M"
+
+Check CM (900):
+
+times = 922 / 900 = 1
+
+n = 922 % 900 = 22
+
+append "CM" → result = "MCM"
+
+Check D (500) → 22 < 500, skip.
+
+Check CD (400) → 22 < 400, skip.
+
+Check C (100) → 22 < 100, skip.
+
+Check XC (90) → 22 < 90, skip.
+
+Check L (50) → 22 < 50, skip.
+
+Check XL (40) → 22 < 40, skip.
+
+Check X (10):
+
+times = 22 / 10 = 2
+
+n = 22 % 10 = 2
+
+append "X" twice → result = "MCMXX"
+
+Check IX (9) → 2 < 9, skip.
+
+Check V (5) → 2 < 5, skip.
+
+Check IV (4) → 2 < 4, skip.
+
+Check I (1):
+
+times = 2 / 1 = 2
+
+n = 2 % 1 = 0
+
+append "I" twice → result = "MCMXXII"
+
+n is now 0. Return "MCMXXII".
+
+Complexity
+
+Time: O(k + L) where k is the number of symbol entries (constant ~13) and L is the number of characters appended to the result. Practically O(L).
+
+Space: O(L) for the output string (plus O(k) for the map).
+
+Common pitfalls & notes
+
+Use LinkedHashMap (or a list of pairs) so entries iterate in the order you inserted them. HashMap does not preserve order.
+
+Make sure to use the correct subtractive pairs: CM for 900, CD for 400, XC for 90, XL for 40, IX for 9, IV for 4. Using "DM" for 900 is incorrect and will produce invalid Roman numerals.
+
+Prefer using StringBuilder for repeated string concatenation in Java for better performance if converting many numbers or very large numbers.
