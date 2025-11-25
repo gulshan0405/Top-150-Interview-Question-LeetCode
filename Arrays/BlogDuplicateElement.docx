@@ -1,0 +1,63 @@
+Step-by-step approach
+1. Handle empty array
+if (nums.length == 0) return 0;
+
+
+If the array is empty, there is nothing to remove, so the new length is 0.
+
+2. Use pointer x to track the position of unique elements
+int x = 0;
+
+
+x always points to the last unique element found so far.
+
+At the start, the first element (nums[0]) is always unique, so x = 0 is correct.
+
+3. Loop through the array starting from index 1
+for (int i = 1; i < nums.length; i++) {
+
+
+Since nums[0] is already handled, we start from i = 1.
+
+4. Compare current element with last unique element
+if (nums[i] != nums[x]) {
+
+
+Because the array is sorted, duplicates sit next to each other.
+
+If nums[i] == nums[x], it’s a duplicate → ignore it.
+
+If nums[i] != nums[x], we found a new unique value.
+
+5. Store the unique value and move pointer x
+x++;
+nums[x] = nums[i];
+
+
+Increase x to the next position where the next unique value should go.
+
+Copy nums[i] there.
+
+This keeps all unique values in the front part of the array.
+
+6. Return the count of unique elements
+return x + 1;
+
+
+x is index of the last unique element, so the total count is x + 1.
+
+Intuition
+
+Since the array is sorted, duplicates are grouped.
+
+You keep a pointer x to the last unique element.
+
+Every time you find a new value, move x forward and store it.
+
+This builds a compact list of unique values at the start of the array.
+
+Complexity
+
+Time: O(n)
+
+Space: O(1)
