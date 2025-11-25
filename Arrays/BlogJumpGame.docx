@@ -1,0 +1,74 @@
+Step-by-step approach
+1. Initialize the farthest reachable index
+int maxIndex = 0;
+
+
+maxIndex tells you how far you can reach at any point.
+
+At the start, you can only reach index 0.
+
+2. Loop through each index of the array
+for (int i = 0; i < n; i++) {
+
+
+As you move through the array, you check whether you can reach index i.
+
+3. If you reach a point you cannot access, return false
+if (maxIndex < i)
+    return false;
+
+
+This is the most important line.
+
+If maxIndex < i, it means you are stuck.
+
+You cannot jump to the current index i.
+
+So reaching the last index is impossible.
+
+Example:
+[3,2,1,0,4]
+When i = 4, maxIndex = 3 → stuck → return false.
+
+4. Update the farthest reachable index
+maxIndex = Math.max(nums[i] + i, maxIndex);
+
+
+From index i, you can jump up to nums[i] steps.
+
+So your reach becomes i + nums[i].
+
+Compare it with the previous maximum and keep the larger one.
+
+This is the greedy part.
+
+5. If you can reach or pass the last index, return true
+if (maxIndex >= n - 1)
+    return true;
+
+
+As soon as your reach goes beyond the last index, no need to continue.
+
+6. If the loop finishes, return true
+return true;
+
+
+If you never got stuck during the loop, you can reach the end.
+
+Intuition behind the algorithm
+
+You don't try to simulate every jump.
+
+You only track the maximum possible reach at each step.
+
+If at any moment you can't reach the current index, you're stuck.
+
+If your reach ever crosses the last index, you're done.
+
+This is why the greedy approach works.
+
+Time and Space Complexity
+
+Time: O(n)
+
+Space: O(1)
