@@ -1,0 +1,75 @@
+Step-by-step approach
+1. Handle small inputs
+if (nums.length <= 2) return nums.length;
+
+
+If the array has 0, 1, or 2 elements, then it already satisfies the rule (each number can appear at most twice).
+So we return the length directly.
+
+2. Use two pointers:
+
+i is the index where we write the next valid number.
+
+j is the index used to scan through the array.
+
+int i = 2; 
+
+
+We start from index 2 because the first two elements are always valid (they can appear twice).
+
+3. Iterate through the array starting from index 2
+for (int j = 2; j < nums.length; j++) {
+
+
+j goes through each element and checks whether it can be kept.
+
+4. Check whether the current element repeats more than allowed
+if (nums[j] != nums[i - 2]) {
+
+
+This is the key logic.
+
+nums[i - 2] is the element two positions before where we plan to write next.
+
+If nums[j] equals nums[i - 2], it means:
+
+The number already appears twice in the result.
+
+So we cannot include nums[j].
+
+If nums[j] != nums[i - 2], it means:
+
+Adding it will not break the “max twice” rule.
+
+So we accept it.
+
+5. Write the value and move pointer i
+nums[i] = nums[j];
+i++;
+
+
+When we accept a number:
+
+We copy it to index i.
+
+Then increment i for the next possible write.
+
+6. Return the new valid length
+return i;
+
+
+i represents the number of valid elements after removing extra duplicates.
+
+Intuition behind the logic
+
+Because the array is sorted, duplicates appear together.
+
+To allow each number at most twice:
+
+You look two positions behind where you're writing.
+
+If the current number matches that value, it would create a triplet.
+
+If it doesn’t match, it's safe to write.
+
+This logic avoids using extra space or counters.
