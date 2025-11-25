@@ -1,0 +1,64 @@
+Step-by-step approach
+
+Handle null input (pre-check).
+
+If s is null, return false or true depending on your definition. Common choice: if (s == null) return false;.
+
+Normalize and filter characters into pal.
+
+Create an empty StringBuilder pal.
+
+Loop through each character ch in s (index i from 0 to s.length()-1).
+
+Convert ch to lowercase with Character.toLowerCase(...) so comparison is case-insensitive.
+
+If Character.isLetterOrDigit(ch) is true, append ch to pal.
+
+Result: pal contains only lowercase alphanumeric characters in the same order they appear in s.
+
+Set two pointers for palindrome check.
+
+int pt1 = 0; (start)
+
+int pt2 = pal.length() - 1; (end)
+
+Compare characters moving pointers inward.
+
+While pt1 < pt2 do:
+
+Compare pal.charAt(pt1) and pal.charAt(pt2).
+
+If they differ, return false immediately (string is not a palindrome).
+
+If they match, increment pt1++ and decrement pt2-- and continue.
+
+If the loop finishes without mismatches, the string is a palindrome.
+
+Return result.
+
+After the loop return true.
+
+Why this works (brief)
+
+Filtering removes noise (spaces, punctuation) and makes checks case-insensitive, so you only compare relevant characters.
+
+Two-pointer comparison checks mirror positions efficiently without repeatedly creating substrings.
+
+Complexity
+
+Time: O(n) where n = s.length() — single pass to build pal plus up to pal.length()/2 comparisons.
+
+Space: O(m) where m = number of alphanumeric characters in s (because of StringBuilder).
+
+If you want O(1) extra space, you can perform two-pointer comparisons directly on the original string while skipping non-alphanumeric chars (I can show that version if you want).
+
+Small improvements / edge cases
+
+Check for s == null.
+
+If pal.length() is 0 or 1, return true early.
+
+Using StringBuilder is better than String concatenation for performance.
+
+To avoid extra memory, you can run two pointers on s itself, moving each pointer to the next alphanumeric character and comparing Character.toLowerCase(s.charAt(...)).
+
