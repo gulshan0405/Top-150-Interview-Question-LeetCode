@@ -1,0 +1,92 @@
+Step-by-step approach
+
+Setup / variables
+
+n = s.length() — length of the input string.
+
+ans = "" — final answer string (words reversed back to normal).
+
+i = 0, j = s.length()-1 — two pointers used for reversing.
+
+arr = s.toCharArray() — character array of the input so you can swap characters.
+
+Reverse the whole string (first major step)
+
+while (i <= j) loop swaps arr[i] and arr[j], then moves i++ and j--.
+
+After this loop arr holds the entire original string reversed, and s = new String(arr) updates s.
+
+Purpose: flipping the whole string turns the target operation (reverse the order of words) into: “reverse every word individually in the reversed string”.
+
+Iterate through the reversed string and extract words
+
+for (int x = 0; x < n; x++) {
+
+String word = "" — start an empty word.
+
+while (x < n && s.charAt(x) != ' ') { word += s.charAt(x); x++; }
+
+This inner loop builds a word by concatenating characters until a space or end of string is reached.
+
+After this inner loop, word contains one token from the reversed string (but the token’s letters are in reversed order relative to the original word).
+
+Note: because you increment x inside the inner while, the for loop’s x++ skips over the space(s) correctly.
+
+Reverse the characters of the extracted word
+
+Convert word to arr (arr = word.toCharArray()), set i = 0, j = word.length()-1.
+
+while (i <= j) swap arr[i] and arr[j] to reverse the characters of word.
+
+Rebuild word = new String(arr) — now the letters inside word are in normal order (because you reversed them after the whole-string reversal).
+
+Effect: reversing each extracted token restores the correct character order inside each word, while the words remain in reversed order relative to the original string — which is exactly what we want.
+
+Append the fixed word to the result
+
+if (word.length() > 0) { ans += word + " "; }
+
+Only non-empty words are appended with a trailing space.
+
+Final trimming and return
+
+ans = ans.trim(); removes the trailing space (and any accidental leading/trailing spaces).
+
+return ans; — final output is the original string with word order reversed and exactly one space between words.
+
+What this achieves
+
+The two-step idea (reverse whole string, then reverse each word) is a standard method to reverse word order in-place conceptually.
+
+Example: "the sky is blue" → reverse all → "eulb si yks eht" → reverse each token → "blue is sky the".
+
+Edge cases and behavior
+
+Multiple spaces: your code ignores empty tokens (checks word.length() > 0), so consecutive spaces are effectively collapsed into single spaces in the output.
+
+Leading / trailing spaces: trim() removes them in the final answer.
+
+Empty string: returns "" safely.
+
+Single character / single word: works fine.
+
+Time & space complexity
+
+Time complexity: O(n²) in the worst case because you build word and ans with repeated String concatenation (word += ... and ans += ...). Each concatenation may copy characters, causing quadratic behavior for long strings.
+
+Space complexity: O(n) extra for char[] arr and the ans string.
+
+Small improvements (recommended)
+
+Replace String concatenation with StringBuilder for word and ans to reduce time complexity to O(n).
+
+You can avoid building intermediate String word entirely by reversing words in-place in the char[] and then copying final tokens into a StringBuilder.
+
+If you want terseness over manual in-place work, a simple and clean alternative is:
+
+String[] parts = s.trim().split("\\s+");
+Collections.reverse(Arrays.asList(parts));
+return String.join(" ", parts);
+
+
+That is simpler, but creates extra arrays/objects; the in-place two-reverse approach is more memory efficient if implemented with StringBuilder.
