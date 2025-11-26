@@ -1,0 +1,100 @@
+Approach (Step by Step)
+
+You are trying to check whether s is a subsequence of t.
+
+A subsequence means:
+
+All characters of s must appear in t
+
+In the same order
+
+But not necessarily continuously
+
+Example:
+s = "abc"
+t = "ahbgdc"
+"abc" is a subsequence of "ahbgdc".
+
+Step 1: Get lengths of the strings
+int m = s.length();
+int n = t.length();
+
+
+You store the lengths of s and t.
+
+Step 2: Create a boolean array to track matched characters
+boolean[] check = new boolean[m];
+
+
+This will store whether each character of s is matched.
+
+For example:
+If s = "abc" → check = [false, false, false]
+
+Step 3: If s is empty, return true
+if(m == 0){
+    return true;
+}
+
+
+An empty string is always a subsequence of any string.
+
+Step 4: Use two pointers to match characters
+int i = 0;
+for(int j = 0; j < n; j++){
+    if(i < m && s.charAt(i) == t.charAt(j)){
+        check[i] = true;
+        i++;
+    }
+}
+
+
+Here is what happens:
+
+i → pointer for string s
+
+j → pointer for string t
+
+You scan through all characters of t.
+Whenever you find a t[j] that matches the current s[i]:
+
+Mark check[i] = true
+
+Move to next character in s by doing i++
+
+This ensures order is preserved.
+
+Step 5: Check if all characters from s were matched
+for(int x = 0; x < m; x++){
+    if(check[x] == false) return false;
+}
+return true;
+
+
+If any position in check is still false, it means that character in s was not found in t.
+
+If all are true → s is a subsequence of t.
+
+Simplified understanding
+
+Your algorithm checks:
+
+Does s[0] appear in t?
+
+After that, does s[1] appear after s[0] in t?
+
+Does s[2] appear after s[1]?
+
+...
+
+If all characters appear in order → return true
+
+You are marking matches with check[].
+
+Time Complexity
+
+You scan through t once → O(n)
+
+You check the check array once → O(m)
+
+Total: O(m + n)
