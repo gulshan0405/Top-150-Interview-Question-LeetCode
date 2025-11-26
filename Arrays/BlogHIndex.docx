@@ -1,0 +1,106 @@
+Approach Explained (Step by Step)
+
+The goal is to find the maximum h such that:
+
+The researcher has at least h papers with at least h citations each.
+
+Your solution uses a counting approach which is very efficient.
+
+Step 1: Create a counting array
+int n = citations.length;
+int[] arr = new int[n + 1];
+
+
+arr[i] will store how many papers have exactly i citations.
+
+We use n + 1 because:
+
+If a paper has more than n citations, it still only contributes to h-index up to n.
+
+So we store everything above n in arr[n].
+
+Example:
+If citations = [3, 0, 6, 1, 5] and n = 5
+Then arr[5] collects any citations ≥ 5.
+
+Step 2: Count how many papers fall in each bucket
+for(int c : citations){
+    if(c > n)
+        arr[n]++;
+    else
+        arr[c]++;
+}
+
+
+For every citation count:
+
+If citation is ≤ n
+→ store it in arr[c]
+
+If citation is > n
+→ store it in arr[n]
+
+This avoids iterating large numbers.
+
+Step 3: Build cumulative count from the back
+int count = 0;
+for(int i = n; i >= 0; i--){
+    count = count + arr[i];
+    if(count >= i)
+        return i;
+}
+
+
+This part finds the h-index:
+
+Start from i = n down to 0
+
+count keeps track of how many papers have at least i citations
+
+Because when we go backward:
+
+At i = n: count = papers with ≥ n citations
+
+At i = n-1: count = papers with ≥ (n-1) citations
+
+…
+
+At i = h: count = papers with ≥ h citations
+
+The moment count >= i, it means:
+
+We have at least i papers with ≥ i citations
+→ this satisfies the H-index condition → return i
+
+Step 4: If nothing matches, return 0
+return 0;
+
+
+This happens when all papers have 0 citations.
+
+Example Walkthrough
+
+Input:
+
+citations = [3, 0, 6, 1, 5]
+
+
+Step-by-step:
+
+arr = count of citations:
+[0:1], [1:1], [3:1], [5+:2]
+
+Reverse scan:
+
+i = 5 → count = 2 (not enough)
+
+i = 4 → count = 2 (not enough)
+
+i = 3 → count = 3 (>=3) → return 3
+
+H-index = 3
+
+Time Complexity
+
+O(n)
+Only one counting pass + one backward scan.
