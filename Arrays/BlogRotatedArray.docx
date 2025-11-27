@@ -1,0 +1,88 @@
+Goal
+
+Rotate the array to the right by k steps.
+
+Example:
+nums = [1,2,3,4,5,6,7], k = 3
+Result = [5,6,7,1,2,3,4]
+
+Approach Explained (Step by Step)
+
+This solution uses the 3-reverse method, which rotates the array in-place using only swapping.
+
+Step 1: Handle k
+k = k % nums.length;
+if (k < 0) {
+    k += nums.length;
+}
+
+
+Why?
+
+If k is bigger than the array size, we only need k % length.
+
+If k is negative, make it positive.
+
+Example:
+k = 10 for size 7 → k = 3
+
+Step 2: Reverse first part
+reverse(nums, 0, nums.length - k - 1);
+
+
+This reverses the part that will move to the end.
+
+For nums = [1,2,3,4,5,6,7], k = 3:
+
+Reverse index 0 to 3 → [4,3,2,1,5,6,7]
+
+Step 3: Reverse second part
+reverse(nums, nums.length - k, nums.length - 1);
+
+
+This reverses the part that will move to the front.
+
+Reverse index 4 to 6 → [4,3,2,1,7,6,5]
+
+Step 4: Reverse the entire array
+reverse(nums, 0, nums.length - 1);
+
+
+Now reverse whole array →
+Final → [5,6,7,1,2,3,4]
+
+This gives the correct rotated result.
+
+Why this works
+
+Rotating right by k means:
+
+Last k elements come to the front.
+
+First (n - k) elements move to the back.
+
+The 3-reverse trick achieves this by:
+
+Reverse A
+
+Reverse B
+
+Reverse whole array
+
+Mathematically this reorders everything correctly.
+
+Step 5: Reverse function
+while (li < ri) {
+    swap(nums[li], nums[ri]);
+    li++;
+    ri--;
+}
+
+
+This is a standard reverse function using two pointers.
+
+Time and Space
+
+Time: O(n)
+
+Space: O(1) (only swaps)
