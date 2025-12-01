@@ -1,0 +1,85 @@
+Step-by-step Explanation of the Logic
+1. Understand the goal
+
+You want to find an index start such that if you begin from that gas station, you can travel the entire circular route without running out of fuel.
+
+gas[i] = fuel you get at station i
+cost[i] = fuel needed to go from station i to station i+1
+
+If total fuel is less than total cost, the answer is impossible.
+
+2. Maintain four variables
+
+sumGas → total gas available across all stations
+
+sumCost → total cost needed
+
+curGas → current fuel while testing the path
+
+start → the possible starting index
+
+3. Iterate through all stations
+
+For every station i:
+
+(a) Add fuel and cost to totals
+sumGas += gas[i];
+sumCost += cost[i];
+
+(b) Update current gas
+curGas += gas[i] - cost[i];
+
+
+This shows whether you gained or lost fuel after leaving this station.
+
+4. Check if the current path fails
+
+If curGas becomes negative:
+
+if (curGas < 0) {
+    start = i + 1;
+    curGas = 0;
+}
+
+
+This means:
+
+You cannot start from the previous start
+
+You should try the next station as the new starting point
+
+Reset curGas because you're starting fresh
+
+Why is this valid?
+Because any station between old start → i cannot be the real start.
+If you can't reach i+1 from your chosen start, nothing inside that window can do better.
+
+5. After loop, check total feasibility
+
+If total gas < total cost, it's impossible:
+
+if (sumGas < sumCost) return -1;
+
+
+Otherwise, the stored start is the correct unique solution.
+
+6. Return the answer
+return start;
+
+Core intuition (your interviewer will love this explanation)
+
+The real answer depends on total gas vs total cost.
+
+The greedy idea is: if you fail at some point, skip everything behind that failure.
+
+The next station after failure is the only meaningful next candidate.
+
+One pass is enough.
+
+The solution is unique when it exists.
+
+Time and space
+
+Time: O(n)
+
+Space: O(1)
