@@ -1,0 +1,95 @@
+Short summary of the algorithm
+
+We add two binary strings from right to left, keeping a numeric carry. At each step we sum the corresponding bits plus the carry, append the resulting bit (sum % 2) to a StringBuilder, update the carry (sum / 2), and move left. At the end we reverse the built string because we produced bits least-significant-first.
+
+Code (reference)
+static public String addBinary(String a, String b) {
+    int i = a.length() - 1;
+    int j = b.length() - 1;
+    int carry = 0;
+    StringBuilder ans = new StringBuilder();
+
+    while (i >= 0 || j >= 0 || carry == 1) {
+        int sum = carry;
+
+        if (i >= 0) sum += a.charAt(i--) - '0';
+        if (j >= 0) sum += b.charAt(j--) - '0';
+
+        ans.append(sum % 2);   // write the current bit
+        carry = sum / 2;       // update carry
+    }
+
+    return ans.reverse().toString();
+}
+
+Step-by-step explanation (line by line)
+
+int i = a.length() - 1; int j = b.length() - 1;
+Set pointers to the last character (least significant bit) of each string.
+
+int carry = 0;
+Hold the carry (0 or 1). Use an integer — simpler and less error-prone than a char.
+
+StringBuilder ans = new StringBuilder();
+Efficiently build the result bits. We append LSB first.
+
+while (i >= 0 || j >= 0 || carry == 1) {
+Loop while there is at least one bit left in a or b, or there is a carry to write. This handles different lengths and final carry.
+
+int sum = carry;
+Start this column's sum with the incoming carry.
+
+if (i >= 0) sum += a.charAt(i--) - '0';
+If a has a bit left, convert char '0'/'1' to int 0/1 and add it, then move i left.
+
+if (j >= 0) sum += b.charAt(j--) - '0';
+Same for b.
+
+ans.append(sum % 2);
+The result bit for this column is sum mod 2 (0 or 1). Append it. Because we process LSB first, this appends in reverse order.
+
+carry = sum / 2;
+New carry is sum / 2 — either 0 or 1, because maximum sum is 3 (1+1+1).
+
+After the loop ends, ans contains the bits in reverse (LSB→MSB), so return ans.reverse().toString(); reverses and returns the final binary string.
+
+Walkthrough with your example: a = "1011", b = "1010"
+
+Start: i points to rightmost of "1011" (index 3), j to rightmost of "1010" (index 3). carry = 0.
+
+We’ll tabulate: bitA | bitB | carryIn | sum | append (sum%2) | carryOut
+
+Iteration 1: 1 | 0 | 0 → sum = 1 → append 1 → carry = 0
+
+Iteration 2: 1 | 1 | 0 → sum = 2 → append 0 → carry = 1
+
+Iteration 3: 0 | 0 | 1 → sum = 1 → append 1 → carry = 0
+
+Iteration 4: 1 | 1 | 0 → sum = 2 → append 0 → carry = 1
+Now i<0, j<0 but carry==1 so one more iteration:
+
+Iteration 5: 0 | 0 | 1 → sum = 1 → append 1 → carry = 0
+
+ans built LSB→MSB is: append sequence = [1,0,1,0,1] ⇒ reversed → "10101". Correct.
+
+Complexity
+
+Time: O(max(n, m)) where n = a.length(), m = b.length().
+
+Space: O(max(n, m)) for the result (plus StringBuilder).
+
+Edge cases handled
+
+Different lengths (we check i >= 0 / j >= 0).
+
+Final carry (loop condition includes carry == 1).
+
+Empty strings? If both are empty, behavior depends on assumptions — normally inputs are nonempty binary strings; you can add guards to return "0" if needed.
+
+Tips & small improvements
+
+Using StringBuilder and numeric carry keeps the code simple and fast.
+
+Avoid concatenating strings in a loop (like ans += ...) because that’s O(n²).
+
+You can also pre-check trivial cases (e.g., if one string is "0"), but not necessary.
