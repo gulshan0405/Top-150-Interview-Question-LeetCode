@@ -1,0 +1,89 @@
+Brute-force twoSum — step-by-step
+
+Get the array length n.
+
+Start an outer loop i from 0 to n-1.
+
+For each i, start an inner loop j from i+1 to n-1.
+
+Print (or inspect) numbers[i], numbers[j], and their sum for debugging.
+
+Compute numbers[i] + numbers[j].
+
+If the sum equals target, return the 1-based indices {i+1, j+1}.
+
+If the loops finish with no match, return {-1, -1}.
+
+Notes:
+
+Works for any unsorted array.
+
+Time complexity: O(n²). Space: O(1).
+
+Use this when n is small or you want a simple, guaranteed-correct solution.
+
+HashMap approach twoSumbetter — step-by-step
+
+Get the array length n.
+
+Create an empty HashMap<Integer,Integer> called map to store value → index.
+
+Loop i from 0 to n-1:
+
+Let a = numbers[i].
+
+Compute more = target - a (the complementary value we need).
+
+Check if (map.containsKey(more)):
+
+If true, map.get(more) returns the index of the complementary number seen earlier. Return {map.get(more), i}.
+
+If not found, put the current value and index into the map: map.put(a, i).
+
+If the loop finishes with no match, return {-1, -1}.
+
+Notes:
+
+This finds a pair where the earlier element is stored in the map and the current element completes the target.
+
+Works on unsorted arrays.
+
+Time complexity: O(n) average. Space: O(n).
+
+Be careful if the problem expects 1-based indices: adjust returned indices accordingly.
+
+Two-pointer twoSumbetterop — step-by-step
+
+Precondition: the input array numbers must be sorted in nondecreasing order for this method to be correct.
+
+Get the array length n.
+
+Initialize two pointers: left = 0 (start) and right = n - 1 (end).
+
+While left < right:
+
+Compute sum = numbers[left] + numbers[right].
+
+If sum == target, return {left+1, right+1} (1-based indices).
+
+If sum > target, decrement right by 1 to reduce the sum.
+
+Else (sum < target), increment left by 1 to increase the sum.
+
+If the loop ends with no match, return {-1, -1}.
+
+Notes:
+
+Time complexity: O(n). Space: O(1).
+
+This is optimal in time and space but requires a sorted array or that the problem statement guarantees sorted input (e.g., LeetCode Two Sum II).
+
+If the original array is not sorted and you must preserve indices, either use the HashMap method or sort a copy while tracking original indices.
+
+Quick comparison and when to use which
+
+Brute-force: simplest, use for tiny arrays or to debug logic.
+
+HashMap: general-purpose, handles unsorted arrays and gives O(n) time. Preferred for typical Two Sum problems requiring original indices.
+
+Two-pointer: best performance with O(n) time and O(1) space, only when input is sorted or you can sort while tracking original indices.
