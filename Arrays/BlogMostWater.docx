@@ -1,0 +1,62 @@
+Approach for the “Most Water / Container With Most Water” problem
+
+The idea is to maximize the area formed between two vertical lines in the array.
+The area between two lines is calculated by:
+
+area = min(height[left], height[right]) * (right – left)
+
+We want to search all possible pairs, but doing it with two pointers avoids the O(n²) brute force.
+
+Step-by-step explanation
+1. Start with two pointers
+
+left at the start of the array
+
+right at the end of the array
+
+This gives us the widest possible width initially.
+
+2. Compute the area for the current pair
+
+Height of the container is the shorter of the two heights
+h = min(height[left], height[right])
+
+Width is the distance between pointers
+w = right - left
+
+Area is h * w.
+
+3. Update the maximum area
+
+Keep track of the biggest area seen so far:
+
+maxArea = Math.max(maxArea, area);
+
+4. Move the pointer at the shorter line
+
+This is the key insight:
+
+If height[left] < height[right], move left++
+
+Otherwise move right--
+
+Reason:
+
+The area is limited by the shorter line.
+
+Moving the taller line inward cannot increase height.
+
+Moving the shorter line might give a taller line and potentially more area.
+
+5. Continue until left meets right
+
+Loop runs while left < right.
+
+6. Return the maximum area found
+Why this works
+
+Every step removes one line (left or right).
+
+We eliminate only the line that cannot help increase the area.
+
+This ensures we check all meaningful pairs in O(n) time instead of checking all pairs in O(n²).
