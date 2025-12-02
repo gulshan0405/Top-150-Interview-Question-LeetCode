@@ -2,7 +2,7 @@ import java.util.HashMap;
 
 public class twoSum {
     
-    static public int[] twoSum(int[] numbers, int target) {
+    static public int[] twoSumbrute(int[] numbers, int target) {
         int n = numbers.length;
         for (int i = 0; i < n; i++) {
             for (int j = i + 1; j < n; j++) {
