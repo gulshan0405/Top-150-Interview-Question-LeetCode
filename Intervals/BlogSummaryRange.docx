@@ -1,0 +1,40 @@
+Approach (Step by Step)
+
+Create a list to store the result.
+This list will hold strings like "1->3" or "7".
+
+Loop through the array.
+Use a pointer i that moves through nums.
+
+Mark the start of a potential range.
+Set start = nums[i].
+This is the first number of the current range.
+
+Extend the range while numbers are consecutive.
+Keep moving i forward as long as the next number is exactly 1 more than the current number (nums[i+1] == nums[i] + 1).
+
+Check if it's a range or a single number.
+
+If the range started at start and ended at a different number (start != nums[i]), then you found a range.
+Add "start->end" to the answer.
+
+Otherwise, if start == nums[i], it’s just a single number.
+Add "start".
+
+Continue until the loop ends.
+
+Return the list.
+
+Example
+
+For input:
+[0, 1, 2, 4, 5, 7]
+
+Start at 0 → 1 → 2 → stop → add "0->2"
+
+Start at 4 → 5 → stop → add "4->5"
+
+Start at 7 → stop → add "7"
+
+Output:
+["0->2", "4->5", "7"]
