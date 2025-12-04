@@ -1,0 +1,49 @@
+Step-by-step approach
+
+Initialize totalProfit to 0.
+This variable will accumulate profit from every increasing price segment.
+
+Iterate through the array starting from index 1.
+You compare each price with the previous day's price.
+
+Check if today's price is greater than yesterday’s price.
+
+If prices[i] > prices[i - 1], it means the price went up.
+
+You can pretend you bought yesterday and sold today to capture that profit.
+
+Add the difference to totalProfit.
+
+Profit for this small rise is prices[i] - prices[i - 1].
+
+Add it to totalProfit.
+
+Repeat for all prices.
+This lets you capture profit from every increasing segment, which is allowed because multiple buy-sell transactions are permitted (as long as you sell before buying again).
+
+Return totalProfit.
+
+Why this works (intuition)
+
+Instead of trying to find the big valleys and peaks, this solution collects all small profits from every upward movement.
+Those small profits added together equal the maximum possible profit when unlimited transactions are allowed.
+
+Example walk-through
+
+Prices: [7, 1, 5, 3, 6, 4]
+
+1 → 5: price increased → profit += 4
+
+5 → 3: price dropped → no profit
+
+3 → 6: price increased → profit += 3
+
+6 → 4: price dropped → no profit
+
+Total profit = 4 + 3 = 7
+
+Complexity
+
+Time: O(n)
+
+Space: O(1)
