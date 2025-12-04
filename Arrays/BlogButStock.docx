@@ -1,0 +1,54 @@
+Step-by-step approach
+
+Handle edge cases.
+If the array is empty or has only one price, no transaction is possible so return 0.
+
+Initialize tracking variables.
+
+minPrice holds the lowest price seen so far; start it at the first element.
+
+maxProfit holds the best profit found so far; start at 0.
+
+Scan prices from left to right (single pass).
+For each price at index i (starting from the second element):
+
+Compare the current price to minPrice.
+
+If the current price is lower, update minPrice to this price. That represents a better day to buy.
+
+Otherwise (current price is >= minPrice), compute the profit if you bought at minPrice and sold today: profit = prices[i] - minPrice.
+
+If profit is greater than maxProfit, update maxProfit.
+
+Continue until the end of the array.
+Because you always track the lowest buy price so far and the best sell profit, by the end you will have the maximum possible single-transaction profit.
+
+Return the result.
+maxProfit is the answer. If prices always decrease, maxProfit stays 0, which correctly indicates no profitable trade exists.
+
+Why this works (intuition)
+
+At every step you consider the best possible buy that could have happened before the current day (minPrice). Selling on the current day gives the best profit for any buy-before-today choice. By checking every day you ensure you consider every valid buy/sell pair, but you do it without nested loops because you maintain the running minimum.
+
+Complexity
+
+Time: O(n) — one pass through the array.
+
+Space: O(1) — only two extra integer variables.
+
+Quick example
+
+Prices: [7, 1, 5, 3, 6, 4]
+
+Start: minPrice = 7, maxProfit = 0
+
+At 1: update minPrice = 1
+
+At 5: profit = 5 - 1 = 4 → update maxProfit = 4
+
+At 3: profit = 3 - 1 = 2 → no change
+
+At 6: profit = 6 - 1 = 5 → update maxProfit = 5
+
+At 4: profit = 4 - 1 = 3 → no change
+Return 5 (buy at 1, sell at 6).
