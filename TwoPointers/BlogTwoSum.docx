@@ -1,0 +1,86 @@
+1. Brute force approach
+Steps
+
+Loop through every element with index i.
+
+For each i, loop through every element after it with index j.
+
+Check if numbers[i] + numbers[j] equals the target.
+
+If it matches, return the answer as 1-based indices [i+1, j+1].
+
+After all loops, if nothing is found, return [-1, -1].
+
+Key points
+
+Time complexity: O(n²)
+
+Easy to write, slow for big arrays
+
+Works for any list, sorted or not
+
+2. Better solution using HashMap
+Steps
+
+Create a map that stores a number and its index.
+
+Loop over the array with index i.
+
+Let a = numbers[i].
+
+Compute more = target - a, which is the value you need.
+
+If more is already in the map, a matching pair exists.
+
+Return [map.get(more) + 1, i + 1].
+
+Otherwise, store the current number and its index in the map.
+
+If the loop finishes with no match, return [-1, -1].
+
+Key points
+
+Time complexity: O(n)
+
+Uses extra memory for the map
+
+Works even if the array is not sorted
+
+Simple and very common for normal Two Sum
+
+3. Optimal two-pointer approach (for sorted array)
+Steps
+
+Set two pointers:
+
+left = 0
+
+right = n - 1
+
+While left < right:
+
+Compute sum = numbers[left] + numbers[right].
+
+If sum == target:
+
+Return [left + 1, right + 1] (1-based result).
+
+If sum > target:
+
+Decrease right-- to reduce the sum.
+
+If sum < target:
+
+Increase left++ to increase the sum.
+
+If the loop ends without finding a pair, return [-1, -1].
+
+Key points
+
+Time complexity: O(n)
+
+No extra memory
+
+Only works because the array is sorted
+
+Fastest and cleanest for Two Sum II
