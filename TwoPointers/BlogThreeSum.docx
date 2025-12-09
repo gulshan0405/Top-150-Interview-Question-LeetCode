@@ -1,0 +1,151 @@
+Brute-force triple loop (naive)
+
+Input check
+
+If the array has fewer than 3 elements, return an empty list.
+
+Triple nested loops
+
+Loop i from 0 to n−3.
+
+Loop j from i+1 to n−2.
+
+Loop k from j+1 to n−1.
+
+For each triple (i, j, k), compute the sum of the three values.
+
+If sum is zero, create a triplet list of the three numbers.
+
+Sort that triplet (so different orderings match).
+
+If the result list does not already contain this triplet, add it.
+
+After all loops finish, return the collected list of unique triplets.
+
+Performance and notes
+
+Time complexity: O(n³) because of three nested loops and contains() check (contains() on a list is O(m) but dominated by cubic factor).
+
+Space complexity: O(k) for storing found triplets (k = number of unique triplets).
+
+Pros: trivial to implement and obviously correct.
+
+Cons: very slow for moderate-sized arrays (n > ~200 will be painful).
+
+Duplicate handling: done by sorting each found triplet and checking for existence; this is inefficient.
+
+Hashmap per fixed first element (improved over brute force)
+
+Input check
+
+Return empty list if array length < 3.
+
+Iterate over array with index i as the fixed first element. For each i:
+
+Create an empty map that will store numbers seen in the inner loop mapped to their index.
+
+For every j from i+1 to end:
+
+Compute the value needed to complete the triplet: needed = -(nums[i] + nums[j]).
+
+If needed exists in the map, you have indices (i, map.get(needed), j) that sum to zero.
+
+Build a triplet from those three values, sort it, and add it to a set of triplets (set prevents duplicates).
+
+Put nums[j] and its index j into the map so future j' can match it.
+
+After the outer loop finishes, convert the set of unique triplets into a list and return it.
+
+Performance and notes
+
+Time complexity: O(n²) on average — for each i you run a linear scan with O(1) expected map operations. But building sorted triplets and set insertions add overhead.
+
+Space complexity: O(n + k) — map for each i plus storage for found triplets.
+
+Pros: much faster than brute force in practice, simpler than full sorting + two-pointer approach if you prefer maps.
+
+Cons and pitfalls:
+
+You must use a structure that prevents duplicate triplets (HashSet of lists or strings). Be careful: lists as keys need proper equality/hash behavior; turning triplets into an immutable form or string works more reliably.
+
+This still uses extra memory for the map at each i and the global set.
+
+If you insert j into the map before checking, you might erroneously reuse the same j; ensure the check is done before inserting the current j (as your code does).
+
+Sort + two-pointer (recommended, efficient and clean)
+
+Input check
+
+If array length < 3, return an empty list.
+
+Sort the array in non-decreasing order.
+
+Sorting makes it easy to avoid duplicates and to use two pointers to find pairs that sum to a target.
+
+Loop over the array with index i from 0 to n−1 treating nums[i] as the first number of the triplet:
+
+Skip this i if it’s the same value as the previous i (this avoids generating duplicate triplets where the first element is the same).
+
+Set target = -nums[i] (we now need two numbers that sum to target).
+
+Call a two-pointer helper (or do it inline): initialize left = i+1, right = n−1.
+
+Two-pointer scan (find pairs that add to target):
+
+While left < right:
+
+Compute sum = nums[left] + nums[right].
+
+If sum > target: decrement right (to reduce sum).
+
+If sum < target: increment left (to increase sum).
+
+If sum == target: record the pair (nums[left], nums[right]) as one solution with nums[i].
+
+Then skip duplicate values by advancing left past any identical values and moving right back past identical values.
+
+Each found pair becomes a triplet [nums[i], nums[left], nums[right]] which you add to the result.
+
+Continue for next i until done. Return the result list.
+
+Performance and notes
+
+Time complexity: O(n²). Sorting costs O(n log n), and then for each i a linear two-pointer scan costs O(n) — overall O(n²).
+
+Space complexity: O(k) for output plus O(1) extra (ignoring output), or O(n) if you count the sort overhead.
+
+Why this is preferred:
+
+It’s fast and memory-efficient compared to the hashmap approach.
+
+Sorting plus skipping equal neighbors makes duplicate elimination straightforward and cheap.
+
+Important detail: skipping duplicates at both the i-level and inside the two-pointer loop is essential to avoid repeated triplets.
+
+Example walkthrough (array: [-1, 0, 1, 2, -1, -4]) using the sort + two-pointer method
+
+Sort → [-4, -1, -1, 0, 1, 2]
+
+i = 0 (value −4): target = 4, left = 1 (−1), right = 5 (2)
+
+sum = −1 + 2 = 1 < 4 → left++ … will never reach 4 with these numbers → no triplets with −4.
+
+i = 1 (value −1): target = 1, left = 2 (−1), right = 5 (2)
+
+sum = −1 + 2 = 1 → found pair → triplet (−1, −1, 2). Skip duplicates for left/right, advance pointers.
+
+Continue left/right scanning and eventually find pair (0,1) → triplet (−1,0,1).
+
+i = 2 (value −1): identical to previous i, skip to avoid duplicates.
+
+i = 3 (value 0): target = 0, left = 4, right = 5 → sum = 1 > 0 → right-- becomes equal to left → stop.
+
+Result: [[-1, -1, 2], [-1, 0, 1]]
+
+Quick comparison & practical guidance
+
+Use brute-force only for learning or tiny arrays.
+
+Hashmap approach is a reasonable improvement and intuitive if you prefer using maps, but watch for duplicate handling and extra memory.
+
+The sort + two-pointer method is the typical accepted solution: clean, fast, and memory-efficient. Use this for interviews and competitive programming.
