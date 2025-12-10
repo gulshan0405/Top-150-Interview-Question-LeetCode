@@ -1,0 +1,137 @@
+1) Original string-based version — step-by-step
+
+What it does (high level): convert n → binary string (in reverse), pad to 32 bits, reverse the string to get the reversed-bit string, convert that back to an int.
+
+Step-by-step:
+
+String s = ""; — prepare an empty string to collect bits.
+
+while (n != 0) { int rem = n % 2; s += rem; n /= 2; }
+
+Repeatedly take n % 2 (the least significant bit), append that bit to s.
+
+Then do integer division n /= 2 to shift n right by one bit (but done via arithmetic).
+
+After this loop s holds the binary digits in reverse order (LSB first).
+
+If n was 0 initially, s would be "" (you may want to handle n==0 separately by setting s="0").
+
+int len = s.length(); int zero = 32 - len; — compute how many '0' characters needed to make 32 bits.
+
+while (x < zero) s += '0'; — append '0' characters to the end of s until it’s 32 characters long. Because s is LSB-first, appending zeros adds leading zeros after reversal (correct for padding).
+
+char[] arr = s.toCharArray(); — convert to char array to reverse the order.
+
+Reverse arr in place with two pointers a and b (swap arr[a] and arr[b] until meet). After this, arr is MSB → LSB of the reversed bit-string.
+
+Convert back to integer:
+
+Initialize ans = 0 and Pow = 0.
+
+Loop for (int i = len - 1; i >= 0; i--):
+
+ans += (arr[i] - '0') * Math.pow(2, Pow); — convert char '0'/'1' to number, multiply by 2^Pow and add.
+
+Pow++.
+
+Return ans.
+
+Worked mini-example (n = 13):
+
+Binary of 13 is 1101. Loop builds s (LSB first): "1011".
+
+Pad to 32 bits: "1011" + 28 zeros (still LSB first).
+
+Reverse → char[] becomes 000...0001101 (MSB → LSB).
+
+Convert back by summing powers → returns integer whose bit pattern is the original 13 reversed across 32 bits.
+
+Complexity & drawbacks:
+
+Time: O(32 + string ops) but with heavy constant cost because of string concatenation and Math.pow. In practice slow.
+
+Space: extra strings and arrays (O(32)).
+
+Bugs/edge cases: string concatenation (s += rem) inside loop is O(n²) overall in Java because Strings are immutable — use StringBuilder if you must build strings. Also need to handle n == 0 explicitly.
+
+Correctness for negative n: using n /= 2 and n % 2 on negative numbers is error-prone; signed division/modulo and sign extension complicate things.
+
+2) Optimal bitwise version — step-by-step
+
+What it does (high level): iterate 32 times; at each step, shift ans left by 1, copy n’s least-significant bit into ans’s lowest position, then shift n right by 1. After 32 iterations ans holds the 32-bit reversal of n.
+
+Code (recommended small tweak included):
+
+public int reverseBits(int n) {
+    int ans = 0;
+    for (int i = 0; i < 32; i++) {
+        ans <<= 1;         // make room for the next bit
+        ans |= (n & 1);    // copy n's least-significant bit into ans
+        n >>>= 1;          // unsigned right shift n (important for correct behavior)
+    }
+    return ans;
+}
+
+
+Use n >>>= 1 (unsigned right shift) rather than n >>= 1. >> preserves the sign bit for negative numbers; >>> shifts in zeros and is what you want when treating n as a 32-bit pattern.
+
+Step-by-step:
+
+ans = 0. This will accumulate reversed bits.
+
+Loop i from 0 to 31 (32 iterations):
+
+ans <<= 1; — shift ans left one bit (multiply by 2). This opens up the least significant bit for the new bit.
+
+ans |= (n & 1); — extract n’s current least-significant bit (n & 1 is 0 or 1) and OR it into ans’s LSB.
+
+n >>>= 1; — shift n right by one bit, filling in zeros on the left (unsigned shift). This moves the next bit into n & 1 for the next iteration.
+
+After 32 iterations all bits from n have been moved into ans in reversed order.
+
+Return ans.
+
+Worked mini-example (n = 13, 32-bit view shows only low bits):
+
+Start: n = ...00001101, ans = 0.
+
+i=0: ans <<=1 -> 0. ans |= (n & 1) → 1. n >>>=1 -> ...00000110.
+
+i=1: ans <<=1 -> 10 (2). ans |= (n & 1) → 10 | 0 = 10. n >>>=1 -> ...00000011.
+
+i=2: ans <<=1 -> 100(4). ans |= (n & 1) → 100 | 1 = 101(5). n >>>=1 -> ...00000001.
+
+...
+
+After 32 steps ans contains the 32-bit reversed pattern of the original n.
+
+Complexity & advantages:
+
+Time: O(32) = O(1) — fixed small constant work. Fastest approach.
+
+Space: O(1), only a couple of ints.
+
+Robust: works for any 32-bit pattern, including negative numbers, provided you use >>> for n.
+
+Clean and idiomatic for bit problems.
+
+Important Java caveat (signed vs unsigned shifts)
+
+>> is an arithmetic (signed) right shift: it fills left bits with the sign bit (1 for negatives). Using >> will propagate ones for negative n and produce incorrect reversed-bit result.
+
+>>> is a logical (unsigned) right shift: it always fills left bits with zeros. Use n >>>= 1 when you treat n as a bit pattern (the usual case in reverseBits).
+
+So prefer:
+
+n >>>= 1;
+
+
+not
+
+n >>= 1;
+
+Final recommendation
+
+Use the bitwise version. It’s simple, fast, memory-efficient, and intended for this task.
+
+If you ever need to debug or visualize, print intermediate ans and n (in binary form) for a few iterations.
