@@ -1,0 +1,97 @@
+Step-by-step approach (optimized sliding-window using last-seen indices)
+
+Below is a clear, ordered walkthrough of how the last[] version of lengthOfLongestSubstring works.
+
+1) Goal / idea in one line
+
+Find the longest substring without repeating characters by maintaining a sliding window [left, right] and, when a duplicate character appears, jump left forward to just after that character’s previous index (using a last array to look up indices in O(1)).
+
+2) Preparation / initial state
+
+int[] last = new int[256]; — an array that will store the last index where each character appeared.
+
+Arrays.fill(last, -1); — fill with -1 to mean “not seen yet.”
+
+int left = 0; — start index of the current window.
+
+int maxLen = 0; — best answer found so far.
+
+right will iterate from 0 to s.length()-1.
+
+Note: char can be used as an index because Java converts it to its numeric Unicode code point. Using 256 covers typical ASCII; for full Unicode you'd use a different structure (e.g., HashMap<Character,Integer> or a larger array).
+
+3) Main loop (for each right index)
+
+For right from 0 to s.length()-1 do:
+
+Read current character: char ch = s.charAt(right);
+
+Look up where this character was last seen: last[ch] (this is -1 if not seen).
+
+If last[ch] >= left then the character was seen inside the current window — it’s a duplicate.
+
+Move left to last[ch] + 1.
+
+That jump discards the part of the window up to and including the previous occurrence, guaranteeing the window becomes duplicate-free for ch.
+
+Store/update the last index for this character: last[ch] = right.
+
+Update maxLen = Math.max(maxLen, right - left + 1).
+
+4) Loop invariant (why this keeps the window valid)
+
+At the start of each iteration, the window [left, right-1] contains no duplicate characters. After processing right and (if needed) moving left, the window [left, right] is also duplicate-free. maxLen always holds the length of the longest duplicate-free window seen so far.
+
+5) Example trace: s = "abcabcbb"
+
+Start: last[*] = -1, left = 0, maxLen = 0.
+
+right=0, ch='a'
+last['a'] = -1 < left(0) → no move.
+set last['a'] = 0. window length = 1. maxLen = 1.
+
+right=1, ch='b'
+last['b'] = -1 < left → no move.
+set last['b'] = 1. window length = 2. maxLen = 2.
+
+right=2, ch='c'
+set last['c'] = 2. window length = 3. maxLen = 3.
+
+right=3, ch='a'
+last['a'] = 0 >= left(0) → duplicate inside window.
+move left = last['a'] + 1 = 1.
+update last['a'] = 3. window now s[1..3] = "bca" length 3. maxLen = 3.
+
+right=4, ch='b'
+last['b'] = 1 >= left(1) → left = 2. last['b'] = 4. window s[2..4] = "cab" length 3.
+
+right=5, ch='c'
+last['c'] = 2 >= left(2) → left = 3. last['c'] = 5. window s[3..5] = "abc" length 3.
+
+right=6, ch='b'
+last['b'] = 4 >= left(3) → left = 5. last['b'] = 6. window s[5..6] = "cb" length 2.
+
+right=7, ch='b'
+last['b'] = 6 >= left(5) → left = 7. last['b'] = 7. window s[7..7] = "b" length 1.
+
+Final maxLen = 3.
+
+6) Correctness intuition
+
+Every time you see a character that was inside the current window, shifting left to last[ch] + 1 removes the earlier occurrence and all characters before it — the smallest change that keeps the window duplicate-free while preserving as much of the window as possible. Since right always moves forward and left only moves forward, every possible substring is considered implicitly and the maximum is found.
+
+7) Complexity
+
+Time: O(n) — right runs once from left to right; each left adjustment is a simple assignment and can only move forward.
+
+Space: O(1) with fixed-size array (256) or O(min(n, alphabet)) generally. Using a HashMap makes space O(min(n, unique chars)).
+
+8) Edge cases & notes
+
+Empty string: returns 0.
+
+Single character strings: returns 1.
+
+If the string contains non-ASCII Unicode characters (surrogate pairs or code points above 255), use HashMap<Character,Integer> or iterate by code point (s.codePoints()) and map int code points to indices instead of assuming 256-size array.
+
+Arrays.fill(last, -1) is essential so unseen characters don’t accidentally look like valid indices.
