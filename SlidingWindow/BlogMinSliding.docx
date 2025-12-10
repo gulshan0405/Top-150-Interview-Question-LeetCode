@@ -1,0 +1,89 @@
+Step-by-step approach (sliding window)
+
+Below is a clear stepwise explanation of the code you posted that finds the minimum-length contiguous subarray whose sum is at least target.
+
+Intuition
+
+Maintain a window [left, right] that expands to include elements until its sum is at least target. Once the window is valid (sum ≥ target) try to shrink it from the left to find the smallest valid window. Repeat until you examine every element.
+
+Preparation
+
+left = 0 — start of current window.
+
+sum = 0 — sum of elements in current window.
+
+minLen = Integer.MAX_VALUE — stores smallest length found. If it remains Integer.MAX_VALUE at the end we return 0 (no valid subarray).
+
+Looping and invariant
+
+For each right from 0 to nums.length - 1:
+
+Expand window: sum += nums[right]. Now window is [left, right].
+
+While the window is valid (sum >= target):
+
+Update answer: minLen = Math.min(minLen, right - left + 1).
+
+Shrink window from left: sum -= nums[left] then left++.
+
+Repeat shrinking while sum still ≥ target.
+
+Invariant: after the inner while finishes, the window sum is strictly less than target (or left passed right+1), so you can safely continue expanding right.
+
+Example walkthrough
+
+Take nums = [2,3,1,2,4,3], target = 7.
+
+Start: left=0, sum=0, minLen=∞.
+
+right=0: add 2 → sum=2 (<7). No shrink.
+
+right=1: add 3 → sum=5 (<7). No shrink.
+
+right=2: add 1 → sum=6 (<7). No shrink.
+
+right=3: add 2 → sum=8 (≥7).
+
+update minLen = min(∞, 3-0+1) = 4.
+
+shrink: subtract nums[0]=2 → sum=6, left=1. Now sum<7, stop shrinking.
+
+right=4: add 4 → sum=10 (≥7).
+
+update minLen = min(4, 4-1+1)=4.
+
+shrink: subtract nums[1]=3 → sum=7, left=2. Still ≥7.
+
+update minLen = min(4, 4-2+1)=3.
+
+shrink: subtract nums[2]=1 → sum=6, left=3. Now <7. Stop.
+
+right=5: add 3 → sum=9 (≥7).
+
+update minLen = min(3, 5-3+1)=3.
+
+shrink: subtract nums[3]=2 → sum=7, left=4. Still ≥7.
+
+update minLen = min(3, 5-4+1)=2.
+
+shrink: subtract nums[4]=4 → sum=3, left=5. Now <7. Stop.
+
+End: minLen = 2. The smallest subarray with sum ≥ 7 is [4,3] length 2.
+
+Correctness argument (brief)
+
+Each index is visited at most twice: once when right moves forward and once when left moves forward. The algorithm considers every valid window formed while right increases, and whenever a valid window is found it shrinks to find the smallest starting at that right. This guarantees you find the overall minimum-length valid subarray.
+
+Complexity
+
+Time: O(n) because left and right each move forward at most n steps.
+
+Space: O(1) extra space.
+
+Edge cases and tips
+
+If target <= 0 you might define behavior: usually return 0 or handle separately.
+
+If all numbers are positive the sliding window works perfectly. If nums can contain negatives the algorithm breaks because shrinking may increase the chance of reaching target later; for arrays with negatives you need a different technique (prefix sums + data structure).
+
+Return 0 when minLen remains Integer.MAX_VALUE (no valid subarray found).
