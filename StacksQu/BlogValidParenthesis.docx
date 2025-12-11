@@ -1,0 +1,90 @@
+Step-by-step approach
+
+If the string is empty return true.
+
+Create an empty stack to store opening brackets.
+
+Scan the string left to right (one character at a time).
+
+When you see an opening bracket (, {, or [ → push it onto the stack.
+
+When you see a closing bracket ), }, or ]:
+
+If the stack is empty → return false (there is no matching opening).
+
+Otherwise pop the top of the stack and check if the popped opening bracket matches the closing bracket:
+
+) should match (
+
+} should match {
+
+] should match [
+
+If the popped bracket does not match → return false.
+
+After processing all characters, if the stack is empty → return true (all openings matched). If the stack is not empty → return false (some openings were not closed).
+
+Pseudocode
+function isValid(s):
+    stack = empty stack
+    for each char c in s:
+        if c is '(' or '{' or '[':
+            stack.push(c)
+        else:  // c is a closing bracket
+            if stack.isEmpty():
+                return false
+            top = stack.pop()
+            if not matches(top, c):
+                return false
+    return stack.isEmpty()
+
+function matches(opening, closing):
+    return (opening == '(' and closing == ')') or
+           (opening == '{' and closing == '}') or
+           (opening == '[' and closing == ']')
+
+Time and space complexity
+
+Time: O(n) — one pass through the string.
+
+Space: O(n) in the worst case (all characters are openings).
+
+Worked examples
+
+Example 1: s = "([)]" — should be false.
+
+Process:
+
+( → push. Stack: ['(']
+
+[ → push. Stack: ['(', '[']
+
+) → closing. Pop [ → does [ match )? No → return false.
+
+We stop early because the mismatch occurs at step 3.
+
+Example 2: s = "{[]}" — should be true.
+
+Process:
+
+{ → push. Stack: ['{']
+
+[ → push. Stack: ['{', '[']
+
+] → pop [ → matches ]. Stack: ['{']
+
+} → pop { → matches }. Stack: []
+End: stack empty → return true.
+
+Example 3: s = "(" — should be false.
+
+( → push. Stack: ['(']
+End: stack not empty → return false.
+
+Edge cases to watch
+
+Closing bracket appears first, e.g. ")(" → stack empty at first closing → false.
+
+Odd length strings cannot be valid (quick check but not required).
+
+Non-bracket characters do not appear per problem statement; if they might, decide whether to ignore or return false.
