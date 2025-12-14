@@ -1,0 +1,131 @@
+Problem reminder (what we are solving)
+
+Given a string s and number of rows numRows, write the string in a zigzag pattern and then read it row by row.
+
+Example for s = "PAYPALISHIRING", numRows = 3:
+
+P   A   H   N
+A P L S I I G
+Y   I   R
+
+
+Reading row-wise gives: "PAHNAPLSIIGYIR"
+
+Step-by-step approach
+Step 1: Create storage for each row
+String[] ans = new String[numRows];
+
+
+Each index in ans represents one row of the zigzag.
+
+Initialize every row with an empty string:
+
+for (int i = 0; i < numRows; i++) {
+    ans[i] = "";
+}
+
+
+After this, for numRows = 3:
+
+ans = ["", "", ""]
+
+Step 2: Pointer to traverse the string
+int i = 0;
+
+
+i keeps track of which character of s we are currently placing.
+
+Step 3: Process characters until the string ends
+while (i < s.length()) {
+
+
+Each loop represents one full zigzag cycle:
+
+vertical down
+
+diagonal up
+
+Step 4: Vertical down movement
+for (int j = 0; j < numRows && i < s.length(); j++) {
+    ans[j] += s.charAt(i++);
+}
+
+
+Characters are placed top to bottom.
+
+j moves from 0 to numRows - 1.
+
+Each character goes into the corresponding row.
+
+Example (first few characters):
+
+P → row 0
+A → row 1
+Y → row 2
+
+
+Result:
+
+ans = ["P", "A", "Y"]
+
+Step 5: Diagonal up movement
+for (int k = numRows - 2; k > 0 && i < s.length(); k--) {
+    ans[k] += s.charAt(i++);
+}
+
+
+Now characters move diagonally upward.
+
+Starts from numRows - 2 and stops at row 1.
+
+Top and bottom rows are skipped (they are already used in vertical).
+
+Example:
+
+P → row 1
+A → row 0 (in next vertical cycle)
+
+
+After diagonal step:
+
+ans = ["P", "AP", "Y"]
+
+Step 6: Repeat until all characters are placed
+
+The while loop continues alternating:
+
+Downward fill
+
+Upward diagonal fill
+
+For "PAYPALISHIRING" and numRows = 3, final rows become:
+
+ans[0] = "PAHN"
+ans[1] = "APLSIIG"
+ans[2] = "YIR"
+
+Step 7: Combine all rows
+String res = "";
+for (String str : ans) {
+    res += str;
+}
+
+
+Concatenate row strings from top to bottom.
+
+This forms the final zigzag output.
+
+Final result:
+
+"PAHNAPLSIIGYIR"
+
+Key idea in one sentence
+
+You simulate zigzag writing by filling characters downward row by row, then upward diagonally, and finally read all rows in order.
+
+Time & space complexity
+
+Time: O(n) (each character processed once)
+
+Space: O(n) (rows store all characters)
+
