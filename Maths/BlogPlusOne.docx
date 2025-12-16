@@ -1,0 +1,72 @@
+Step-by-step approach (LeetCode 66 – Plus One)
+
+You are given an array where each element represents one digit of a number.
+
+You need to add 1 to this number and return the result as an array of digits.
+
+Start from the last index of the array because addition always begins from the least significant digit.
+
+Check the current digit:
+
+If the digit is less than 9, simply add 1 to it.
+
+After adding 1, no carry is generated, so the operation is finished. Return the array immediately.
+
+If the digit is 9:
+
+Adding 1 makes it 10.
+
+Write 0 at this position.
+
+Carry 1 to the next digit on the left.
+
+Move one step left and repeat the process.
+
+Continue this process until:
+
+You find a digit less than 9, or
+
+You finish processing all digits.
+
+If all digits were 9, then after adding 1:
+
+Every digit becomes 0.
+
+You need one extra digit at the front.
+
+Create a new array with length original length + 1.
+
+Set the first digit to 1 and leave the rest as 0.
+
+Return the final array.
+
+Example walkthrough
+Input
+[1, 2, 3]
+
+
+Start from 3
+
+3 + 1 = 4
+
+Result: [1, 2, 4]
+
+Input
+[1, 2, 9]
+
+
+9 + 1 = 10 → write 0, carry
+
+2 + 1 = 3
+
+Result: [1, 3, 0]
+
+Input
+[9, 9, 9]
+
+
+All digits become 0
+
+Extra digit needed
+
+Result: [1, 0, 0, 0]

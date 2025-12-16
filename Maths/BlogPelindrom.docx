@@ -1,0 +1,58 @@
+Step-by-step approach (LeetCode 9 – Palindrome Number)
+
+The given integer x is the number we need to check.
+
+Store the original value of x in another variable (original) because x will be modified during the process.
+
+Initialize a variable rev to 0.
+This variable will store the reversed number.
+
+Use a loop that runs while x is greater than 0.
+
+In each iteration of the loop:
+
+Extract the last digit of x using x % 10.
+
+Add this digit to the reversed number by:
+
+multiplying rev by 10
+
+then adding the extracted digit.
+
+Remove the last digit from x by doing integer division x / 10.
+
+Continue this process until all digits of x are processed.
+
+After the loop ends, rev contains the reverse of the original number.
+
+Compare the reversed number (rev) with the original number (original).
+
+If both are equal, the number is a palindrome, so return true.
+Otherwise, return false.
+
+Example walkthrough
+Input
+x = 121
+
+
+Reverse becomes 121
+
+rev == original → true
+
+Input
+x = 123
+
+
+Reverse becomes 321
+
+rev != original → false
+
+Important notes
+
+This approach works only for non-negative numbers.
+
+Negative numbers automatically return false because their reverse is not the same.
+
+Time complexity is O(n) where n is the number of digits.
+
+Space complexity is O(1).
