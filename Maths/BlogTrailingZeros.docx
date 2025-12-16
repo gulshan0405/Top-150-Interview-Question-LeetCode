@@ -1,0 +1,186 @@
+Step-by-step approach of your current code (in words)
+
+You are given an integer n.
+
+You try to calculate n! (factorial of n).
+
+You store n in a.
+
+You initialize fact with n.
+
+You use a loop to compute factorial:
+
+Multiply fact with (a - 1)
+
+Decrease a by 1
+
+Repeat until a becomes 1
+
+After computing the factorial, you initialize a variable count to 0.
+
+You then start counting trailing zeros:
+
+Extract the last digit of fact using % 10
+
+If the digit is 0, increase count
+
+If the digit is not 0, stop the loop
+
+Remove the last digit using / 10
+
+Finally, return the number of trailing zeros.
+
+Why this solution is wrong ❌ (very important)
+1️⃣ Factorial becomes extremely large
+
+Even for small inputs:
+
+20! is already larger than what long can store
+
+LeetCode test cases go up to n = 10^4
+
+So:
+
+fact overflows
+
+You get incorrect values
+
+Many test cases fail
+
+2️⃣ Unnecessary computation
+
+You do not need to compute factorial at all to find trailing zeros.
+
+3️⃣ Time complexity is too high
+
+Computing factorial is expensive
+
+Extracting digits from a huge number is inefficient
+
+LeetCode 172 is designed to avoid factorial calculation completely.
+
+Correct step-by-step approach (LeetCode 172 – Trailing Zeroes)
+Key idea
+
+Trailing zeros are created by factors of 10.
+Each 10 = 2 × 5.
+
+There are plenty of 2s in factorials
+
+The number of trailing zeros depends on how many 5s are present
+
+Correct approach in words
+
+Initialize a variable count to 0.
+
+Count how many numbers from 1 to n contribute a factor of 5.
+
+Divide n by 5 and add the result to count.
+
+This counts numbers like 5, 10, 15, 20...
+
+Divide n by 25 and add the result to count.
+
+This counts extra 5s from numbers like 25, 50, 75...
+
+Continue dividing n by higher powers of 5 (125, 625, etc.)
+until the result becomes 0.
+
+Return count.
+
+Example walkthrough
+Input
+n = 10
+
+
+10 / 5 = 2 → two factors of 5
+
+No higher power contributes
+
+Result = 2
+
+Input
+n = 25
+
+
+25 / 5 = 5
+
+25 / 25 = 1 (extra 5 from 25)
+
+Total trailing zeros = 6
+
+Key takeaway (very important)
+
+❌ Never compute factorial for this problem
+
+✅ Count factors of 5
+
+✅ Efficient and safe
+
+✅ Passes all LeetCode test cases
+
+
+
+
+
+
+🧠 Step-by-step Approach (in words)
+
+Trailing zeros in a factorial are created by the number 10s in the result.
+
+Each 10 is formed by multiplying 2 × 5.
+
+In factorials, there are more factors of 2 than factors of 5.
+
+So, the number of trailing zeros depends only on how many times 5 appears as a factor.
+
+Count how many numbers between 1 and n are divisible by 5.
+
+This gives the number of factors of 5.
+
+Some numbers contribute more than one factor of 5:
+
+25 = 5 × 5
+
+125 = 5 × 5 × 5
+
+These must be counted again.
+
+Keep dividing n by increasing powers of 5:
+
+n / 5
+
+n / 25
+
+n / 125
+
+Continue until the division result becomes 0.
+
+Add all these values to get the total number of trailing zeros.
+
+Return the final count.
+
+📌 Example
+Input
+n = 25
+
+Calculation
+25 / 5   = 5
+25 / 25  = 1
+25 / 125 = 0
+
+Output
+5 + 1 = 6
+
+
+So, 25! has 6 trailing zeros.
+
+⏱ Complexity
+
+Time Complexity: O(log₅ n)
+
+Space Complexity: O(1)
+
+✅ No overflow
+
+✅ Passes all test cases
