@@ -1,0 +1,173 @@
+1️⃣ findSubstring (Brute Force Approach)
+Idea
+
+Try every possible starting index and check whether the substring starting there can be split into words that match the words array exactly once.
+
+Step-by-step
+
+Get word length
+
+int wordLen = words[0].length();
+
+
+All words have the same length.
+
+Total length of concatenation
+
+int totalLen = wordLen * words.length;
+
+
+This is how long a valid substring must be.
+
+Loop over all valid starting indices
+
+for (int i = 0; i + totalLen <= s.length(); i++)
+
+
+We only check indices where a full concatenation can fit.
+
+Create a map for used words
+
+HashMap<String, Integer> map = new HashMap<>();
+
+
+Tracks which words have already been used for this i.
+
+Check words one by one
+
+int count = 0;
+while (count < words.length)
+
+
+Each iteration checks one word-sized chunk.
+
+Extract current chunk
+
+String sub = s.substring(start, end);
+
+
+This is a candidate word.
+
+Try to match it with unused words
+
+for (String w : words)
+
+
+If sub equals a word and hasn’t been used yet, mark it as used.
+
+Break if no match
+
+if (!found) break;
+
+
+This starting index is invalid.
+
+If all words matched
+
+if (count == words.length)
+    result.add(i);
+
+
+Store the starting index.
+
+Complexity
+
+Time: O(n * k * k)
+
+Space: O(k)
+
+❌ Fails large inputs (TLE)
+
+❌ Does not handle duplicate words correctly
+
+2️⃣ findSubstring2 (Optimal Sliding Window)
+Idea
+
+Instead of restarting from every index, slide a fixed-size window in steps of wordLen and maintain word counts dynamically.
+
+Step-by-step
+1. Edge case check
+if (s.length() == 0 || words.length == 0) return result;
+
+2. Precompute word sizes
+int wordLen = words[0].length();
+int wordCount = words.length;
+
+3. Build required frequency map
+HashMap<String, Integer> required = new HashMap<>();
+
+
+Stores how many times each word must appear.
+
+Example:
+
+["foo","bar","foo"] → {foo=2, bar=1}
+
+4. Try each offset
+for (int offset = 0; offset < wordLen; offset++)
+
+
+Handles alignment. Words must start at valid boundaries.
+
+5. Sliding window setup
+HashMap<String, Integer> window = new HashMap<>();
+int left = offset;
+int count = 0;
+
+
+left → start of window
+
+count → number of valid words in window
+
+6. Move right pointer
+for (int right = offset; right + wordLen <= s.length(); right += wordLen)
+
+
+Moves in word-sized steps.
+
+7. Extract current word
+String word = s.substring(right, right + wordLen);
+
+8. Reset if word not required
+if (!required.containsKey(word))
+
+
+Clear window
+
+Reset count
+
+Move left pointer
+
+9. Add word to window
+window.put(word, window.getOrDefault(word, 0) + 1);
+count++;
+
+10. Shrink window if word exceeds required frequency
+while (window.get(word) > required.get(word))
+
+
+Remove words from the left until valid again.
+
+11. Valid window found
+if (count == wordCount)
+    result.add(left);
+
+
+All required words are present in correct count.
+
+Complexity
+
+Time: O(n)
+
+Space: O(k)
+
+✅ Handles duplicates
+
+✅ Passes all test cases
+
+✅ No TLE
+
+Final Comparison
+Approach	Time	Handles Duplicates	Passes LC
+Brute Force	❌ Slow	❌ No	❌
+Sliding Window	✅ Fast	✅ Yes	✅
