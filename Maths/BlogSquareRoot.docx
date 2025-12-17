@@ -1,0 +1,107 @@
+APPROACH 1: Binary Search (Optimal)
+
+This is the recommended solution.
+
+Step-by-step approach
+
+Handle small cases
+
+If x is 0 or 1, the square root is the number itself.
+
+if (x == 0 || x == 1) return x;
+
+
+Define search space
+
+The square root of x always lies between 1 and x / 2.
+
+int left = 1;
+int right = x / 2;
+int ans = 0;
+
+
+Apply binary search
+
+Calculate mid.
+
+Compute mid * mid using long to avoid overflow.
+
+Compare square with x
+
+If mid * mid == x → exact square root found.
+
+If mid * mid < x:
+
+Store mid as a possible answer.
+
+Move to the right half.
+
+If mid * mid > x:
+
+Move to the left half.
+
+Repeat until search ends
+
+When left > right, ans stores the integer square root.
+
+Return result
+
+return ans;
+
+Why this approach is good
+
+Time complexity: O(log x)
+
+Space complexity: O(1)
+
+No TLE
+
+Safely avoids overflow using long
+
+APPROACH 2: Brute Force (Not recommended)
+
+This approach checks every number one by one.
+
+Step-by-step approach
+
+Initialize variables
+
+long n = Integer.MAX_VALUE;
+long ans = 0;
+
+
+Start checking from 1
+
+For each i, calculate i * i.
+
+Compare with x
+
+If i * i > x, then:
+
+i - 1 is the integer square root.
+
+Store it in ans.
+
+Break the loop.
+
+Return the result
+
+return (int) ans;
+
+Why this approach is bad
+
+Time complexity: O(n)
+
+Loops up to Integer.MAX_VALUE
+
+Will TLE for large inputs
+
+Only useful for understanding, not for real use
+
+Comparison summary
+Approach	Time	Space	Status
+Binary Search	O(log x)	O(1)	✅ Best
+Brute Force	O(n)	O(1)	❌ TLE
+Interview one-liner
+
+“Binary search works because the square root function is monotonic, allowing us to reduce the search space efficiently.”
