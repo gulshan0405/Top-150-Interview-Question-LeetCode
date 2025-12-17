@@ -1,0 +1,131 @@
+APPROACH 1: Floyd’s Cycle Detection (Fast & Slow Pointer)
+
+This is the optimal solution.
+
+Code (your commented part)
+ListNode fast = head;
+ListNode slow = head;
+
+while (fast != null && fast.next != null) {
+    fast = fast.next.next;
+    slow = slow.next;
+
+    if (fast == slow) {
+        return true;
+    }
+}
+return false;
+
+Step-by-step thinking
+Step 1: Initialize two pointers
+
+slow moves 1 step
+
+fast moves 2 steps
+
+Both start at head.
+
+Step 2: Traverse the list
+
+In every loop:
+
+slow = slow.next
+
+fast = fast.next.next
+
+Step 3: Why this works
+
+If there is no cycle
+fast will reach null first → loop ends → return false
+
+If there is a cycle
+fast will eventually catch up to slow inside the cycle
+When fast == slow → cycle found
+
+Step-by-step dry run (cycle example)
+
+List:
+
+1 -> 2 -> 3 -> 4
+      ↑        ↓
+      └────────┘
+
+Step	slow	fast
+1	2	3
+2	3	2
+3	4	4
+
+fast == slow → cycle detected
+
+Complexity
+
+Time: O(n)
+
+Space: O(1)
+
+This is why interviewers love it.
+
+APPROACH 2: HashSet method (Your active code)
+Code
+HashSet<ListNode> map = new HashSet<>();
+ListNode node = head;
+
+while (node != null) {
+    if (!map.contains(node)) {
+        map.add(node);
+        node = node.next;
+    } else {
+        return true;
+    }
+}
+return false;
+
+Step-by-step thinking
+Step 1: Use a HashSet
+
+Store node references, not values
+
+HashSet allows O(1) lookup
+
+Step 2: Traverse the list
+
+For every node:
+
+Check if it already exists in the set
+
+If yes → cycle found
+
+If no → add it and move forward
+
+Step 3: Why this works
+
+In a normal list, each node is visited once
+
+In a cycle, a node is visited again
+
+HashSet detects repetition instantly
+
+Step-by-step dry run (cycle example)
+Node	In Set?	Action
+1	No	Add
+2	No	Add
+3	No	Add
+4	No	Add
+2	Yes	Return true
+Complexity
+
+Time: O(n)
+
+Space: O(n)
+
+Comparison (important for exams/interviews)
+Method	Time	Space	Preferred
+Fast–Slow	O(n)	O(1)	✅ Best
+HashSet	O(n)	O(n)	Acceptable
+Key interview lines you can say
+
+“HashSet solution is straightforward but uses extra space.”
+
+“Floyd’s cycle detection uses two pointers and constant space.”
+
+“Cycle exists if fast and slow pointers meet.”
