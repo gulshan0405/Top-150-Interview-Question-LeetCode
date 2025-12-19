@@ -1,0 +1,160 @@
+Problem in simple words
+
+You are given two linked lists l1 and l2.
+
+Each node contains one digit
+
+Digits are stored in reverse order
+
+Each linked list represents a number
+
+Example:
+l1 = 2 → 4 → 3 means 342
+l2 = 5 → 6 → 4 means 465
+
+Goal: return a linked list that represents 342 + 465 = 807
+Output: 7 → 0 → 8
+
+Step-by-step approach of the code
+Step 1: Create a dummy node
+ListNode dummy = new ListNode(0);
+
+
+Why?
+
+This node is a placeholder
+
+It helps build the result list easily
+
+We finally return dummy.next
+
+Think of it as a starting anchor.
+
+Step 2: Pointer to build the result
+ListNode curr = dummy;
+
+
+curr moves forward as we add new nodes
+
+Always points to the last node of the result list
+
+Step 3: Initialize carry
+int carry = 0;
+
+
+Needed because digit addition may exceed 9
+
+Example: 8 + 7 = 15, carry = 1, digit = 5
+
+Step 4: Loop until all digits and carry are processed
+while (l1 != null || l2 != null || carry != 0)
+
+
+This loop runs while:
+
+l1 still has digits OR
+
+l2 still has digits OR
+
+a carry is left
+
+This ensures no digit or carry is missed.
+
+Step 5: Start sum with carry
+int sum = carry;
+
+
+Previous carry is added first
+
+Example: carry from last addition = 1
+
+Step 6: Add value from l1 (if exists)
+if (l1 != null) {
+    sum += l1.val;
+    l1 = l1.next;
+}
+
+
+If l1 has a node:
+
+Add its digit to sum
+
+Move l1 forward
+
+Step 7: Add value from l2 (if exists)
+if (l2 != null) {
+    sum += l2.val;
+    l2 = l2.next;
+}
+
+
+Same logic as l1
+
+Handles different-length lists
+
+Step 8: Update carry
+carry = sum / 10;
+
+
+Integer division gives carry
+
+Example:
+
+sum = 15 → carry = 1
+
+sum = 7 → carry = 0
+
+Step 9: Create new node with digit
+curr.next = new ListNode(sum % 10);
+
+
+% 10 gives the last digit
+
+Example:
+
+sum = 15 → digit = 5
+
+sum = 7 → digit = 7
+
+Step 10: Move the current pointer
+curr = curr.next;
+
+
+Advance to the newly created node
+
+Ready for next digit
+
+Step 11: Repeat loop
+
+The loop continues until:
+
+both lists are exhausted
+
+and no carry remains
+
+Step 12: Return result
+return dummy.next;
+
+
+dummy was just a helper
+
+dummy.next is the actual result list
+
+Dry run example
+Input
+l1: 2 → 4 → 3
+l2: 5 → 6 → 4
+
+Iterations
+l1	l2	carry	sum	digit	result
+2	5	0	7	7	7
+4	6	0	10	0	7 → 0
+3	4	1	8	8	7 → 0 → 8
+Final Output
+7 → 0 → 8
+
+Time & Space Complexity
+
+Time: O(max(n, m))
+
+Space: O(max(n, m)) (new linked list)
