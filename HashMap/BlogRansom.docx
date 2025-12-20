@@ -1,0 +1,143 @@
+Problem in simple words
+
+You are given two strings:
+
+ransomNote
+
+magazine
+
+You must check whether you can construct ransomNote using characters from magazine.
+
+Rules:
+
+Each character from magazine can be used only once
+
+Order does not matter
+
+Core idea
+
+We must:
+
+Count how many times each character appears in magazine
+
+Use those characters to build ransomNote
+
+If at any point a character is missing or exhausted → return false
+
+To track counts, we use a HashMap.
+
+Step-by-step approach
+Step 1: Create a HashMap
+
+This map will store:
+
+character → frequency in magazine
+
+HashMap<Character, Integer> map = new HashMap<>();
+
+Step 2: Count characters in magazine
+
+Loop through magazine and update frequency.
+
+for (char c : magazine.toCharArray()) {
+    map.put(c, map.getOrDefault(c, 0) + 1);
+}
+
+
+What this does:
+
+If c is new → start count at 1
+
+If c already exists → increase its count
+
+After this step, the map tells us exactly how many times each character is available.
+
+Step 3: Try to build ransomNote
+
+Now loop through ransomNote.
+
+for (char c : ransomNote.toCharArray()) {
+
+
+For each character c, check two things.
+
+Step 4: Check availability
+if (!map.containsKey(c) || map.get(c) == 0) {
+    return false;
+}
+
+
+This means:
+
+If the character does not exist in the map → it was never in magazine
+
+OR if its count is 0 → we already used all occurrences
+
+In either case, construction is impossible.
+
+Step 5: Consume the character
+
+If the character is available:
+
+map.put(c, map.get(c) - 1);
+
+
+This simulates using one character from the magazine.
+
+Step 6: Final result
+
+If the loop finishes without returning false, it means:
+
+Every character in ransomNote was successfully found and used
+
+So return:
+
+return true;
+
+Final complete code
+public boolean canConstruct(String ransomNote, String magazine) {
+
+    HashMap<Character, Integer> map = new HashMap<>();
+
+    // Step 1 & 2: count magazine characters
+    for (char c : magazine.toCharArray()) {
+        map.put(c, map.getOrDefault(c, 0) + 1);
+    }
+
+    // Step 3, 4 & 5: build ransomNote
+    for (char c : ransomNote.toCharArray()) {
+        if (!map.containsKey(c) || map.get(c) == 0) {
+            return false;
+        }
+        map.put(c, map.get(c) - 1);
+    }
+
+    // Step 6
+    return true;
+}
+
+Time & Space Complexity
+
+Time: O(n + m)
+(n = length of ransomNote, m = length of magazine)
+
+Space: O(k) where k is number of unique characters (at most 26 for lowercase letters)
+
+One interview tip
+
+If the problem states only lowercase English letters, mention that you can optimize using:
+
+int[] freq = new int[26];
+
+
+Interviewers like that.
+
+If you want, next I can:
+
+Do a full dry run with input
+
+Rewrite this using an array approach
+
+Help you write the approach in exam-ready wording
+
+Just say the word.
