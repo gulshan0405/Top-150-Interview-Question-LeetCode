@@ -1,0 +1,166 @@
+Problem in one line
+
+You are given two sorted linked lists and you need to merge them into one sorted list.
+
+Example:
+
+list1 = 1 -> 3 -> 5
+list2 = 2 -> 4 -> 6
+
+
+Result:
+
+1 -> 2 -> 3 -> 4 -> 5 -> 6
+
+Step 1: Create dummy node
+ListNode dummy = new ListNode(-1);
+ListNode temp = dummy;
+
+
+dummy is a fake starting node
+
+temp is used to build the merged list
+
+Real answer will start at dummy.next
+
+Initial state:
+
+dummy(-1) -> null
+temp ↑
+
+Step 2: Start comparing nodes
+while (list1 != null && list2 != null)
+
+
+This loop runs until one list becomes empty.
+
+Step 3: First comparison
+if (list1.val <= list2.val)
+
+Case 1: list1.val is smaller (or equal)
+temp.next = list1;
+list1 = list1.next;
+
+
+What happens:
+
+Attach list1 node to merged list
+
+Move list1 forward
+
+Then:
+
+temp = temp.next;
+
+
+Move temp forward to the newly added node.
+
+Step 4: Else case (list2 is smaller)
+temp.next = list2;
+list2 = list2.next;
+temp = temp.next;
+
+
+Same logic, just using list2.
+
+Step 5: Dry run with example
+Initial:
+list1: 1 -> 3 -> 5
+list2: 2 -> 4 -> 6
+
+merged: dummy
+
+Iteration 1:
+
+Compare 1 and 2
+
+Take 1
+
+merged: -1 -> 1
+list1: 3 -> 5
+list2: 2 -> 4 -> 6
+
+Iteration 2:
+
+Compare 3 and 2
+
+Take 2
+
+merged: -1 -> 1 -> 2
+list1: 3 -> 5
+list2: 4 -> 6
+
+Iteration 3:
+
+Compare 3 and 4
+
+Take 3
+
+merged: -1 -> 1 -> 2 -> 3
+list1: 5
+list2: 4 -> 6
+
+Iteration 4:
+
+Compare 5 and 4
+
+Take 4
+
+merged: -1 -> 1 -> 2 -> 3 -> 4
+list1: 5
+list2: 6
+
+Iteration 5:
+
+Compare 5 and 6
+
+Take 5
+
+merged: -1 -> 1 -> 2 -> 3 -> 4 -> 5
+list1: null
+list2: 6
+
+
+Loop ends because list1 is null.
+
+Step 6: Attach remaining nodes
+if (list1 != null) {
+    temp.next = list1;
+}
+if (list2 != null) {
+    temp.next = list2;
+}
+
+
+Only one of these will run
+
+Remaining nodes are already sorted
+
+Just attach them directly
+
+Result:
+
+-1 -> 1 -> 2 -> 3 -> 4 -> 5 -> 6
+
+Step 7: Return final answer
+return dummy.next;
+
+
+Skip the fake node.
+
+Final merged list:
+
+1 -> 2 -> 3 -> 4 -> 5 -> 6
+
+Why this approach is good
+
+No extra nodes created
+
+Time complexity: O(n + m)
+
+Space complexity: O(1)
+
+Clean pointer movement
+
+Very interview-friendly
+
