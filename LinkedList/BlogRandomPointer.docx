@@ -1,0 +1,204 @@
+Problem in one line
+
+Each node has:
+
+next → normal next pointer
+
+random → can point to any node or null
+
+You must create a deep copy of the list.
+
+Core idea
+
+Use a HashMap to store
+original node → copied node
+
+Build nodes first
+
+Then fix next and random pointers
+
+Step 1: Initialize
+Node temp = head;
+HashMap<Node, Node> map = new HashMap<>();
+
+
+temp is used to traverse the original list
+
+map stores the relation:
+
+original node → copied node
+
+Step 2: First pass – copy only nodes (no links)
+while (temp != null) {
+    Node copyNode = new Node(temp.val);
+    map.put(temp, copyNode);
+    temp = temp.next;
+}
+
+What happens here
+
+For every original node:
+
+Create a new node with same value
+
+Store mapping in the HashMap
+
+Example original list:
+
+A(7) -> B(13) -> C(11)
+
+
+Map after first loop:
+
+A → A'
+B → B'
+C → C'
+
+
+At this point:
+
+next and random are not set yet
+
+Only nodes exist
+
+Step 3: Reset temp
+temp = head;
+Node copyNode = new Node(0);
+
+
+Go back to the start of original list
+
+copyNode will temporarily point to the current copied node
+
+(The new Node(0) here is unnecessary, but harmless.)
+
+Step 4: Second pass – assign pointers
+while (temp != null) {
+    copyNode = map.get(temp);
+    copyNode.next = map.get(temp.next);
+    copyNode.random = map.get(temp.random);
+    temp = temp.next;
+}
+
+What happens here
+
+For each original node:
+
+Get its copied node
+
+Set next using the map
+
+Set random using the map
+
+Example:
+
+Original: A.random → C
+Copied:   A'.random → C'
+
+
+Why this works:
+
+map.get(temp.random) gives the copied version of the random node
+
+map.get(null) safely returns null
+
+Step 5: Return head of copied list
+return map.get(head);
+
+
+head is original head
+
+map.get(head) is copied head
+
+Visual flow
+Original list
+A → B → C
+|    |    |
+v    v    v
+C    A    B
+
+Copied list
+A' → B' → C'
+|     |     |
+v     v     v
+C'    A'    B'
+
+Time & space complexity
+
+Time: O(n)
+
+Space: O(n) (HashMap)
+
+Small improvements (optional)
+
+Remove new Node(0) and directly use:
+
+Node copyNode;
+
+//optimal solution
+
+Approach: Copy List with Random Pointer (O(1) Space)
+
+We solve this problem in three passes over the linked list, without using extra space like a HashMap.
+
+Step 1: Interleave copied nodes with original nodes
+
+Traverse the original list
+
+For each node, create its copy
+
+Insert the copied node right after the original node
+
+After this step, the list looks like:
+Original1 → Copy1 → Original2 → Copy2 → Original3 → Copy3
+
+
+This helps us access the copied node of any original node in O(1) time.
+
+Step 2: Assign random pointers to copied nodes
+
+Traverse the interleaved list
+
+For each original node:
+
+Its copied node is original.next
+
+The copied random should point to original.random.next
+
+If the original random is null, copied random is also null
+
+This correctly links all random pointers without extra memory.
+
+Step 3: Separate the copied list from the original list
+
+Traverse the interleaved list again
+
+Restore the original list by skipping copied nodes
+
+Extract the copied nodes into a new list
+
+At the end:
+
+Original list is unchanged
+
+Copied list is completely independent (deep copy)
+
+Final result
+
+Return the head of the copied list.
+
+Time and space complexity
+
+Time: O(n)
+
+Extra space: O(1)
+
+Why this approach works
+
+No HashMap needed
+
+Random pointer mapping is achieved using adjacency
+
+Efficient and elegant
+
+Often asked as a follow-up in interviews
