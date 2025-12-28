@@ -1,0 +1,131 @@
+Approach 1: Using an array (Brute force)
+Idea
+
+Convert the linked list to an array, reverse the required part in the array, then build a new linked list from that array.
+
+Step by step
+
+Find the size of the linked list
+
+Traverse the list once.
+
+Count how many nodes are there.
+
+Store values in an array
+
+Create an array of that size.
+
+Traverse the list again and store each node’s val in the array.
+
+Convert positions
+
+Linked list positions are 1-based.
+
+Convert them to 0-based indices:
+
+a = left - 1
+
+b = right - 1
+
+Reverse the subarray
+
+Swap arr[a] and arr[b].
+
+Move a++ and b--.
+
+Continue until a <= b.
+
+Create a new linked list
+
+Create the first node using arr[0].
+
+Iterate through the array and create new nodes.
+
+Link them using next.
+
+Return the new head
+
+The rebuilt list now has the required part reversed.
+
+Time and space
+
+Time: O(n)
+
+Space: O(n) extra (array + new list)
+
+Approach 2: In-place reversal (Optimal)
+Idea
+
+Reverse only the part between left and right by changing pointers, without extra memory.
+
+Step by step
+
+Edge case
+
+If left == right, no change needed.
+
+Return head.
+
+Move to the left position
+
+Use current starting at head.
+
+Use prev to track the node before current.
+
+Move both until current reaches the left node.
+
+Mark important nodes
+
+last → node before the left position.
+
+newEnd → node at the left position (this will become the end after reversal).
+
+Reverse the nodes from left to right
+
+Reverse pointers exactly like normal linked list reversal.
+
+Run the loop right - left + 1 times.
+
+Keep updating prev, current, and next.
+
+Reconnect the reversed part
+
+If last is not null:
+
+Connect last.next to prev (new head of reversed part).
+
+Else:
+
+Update head (reversal started from first node).
+
+Connect the tail
+
+Connect newEnd.next to current (remaining list).
+
+Return head
+
+The list is now correctly reversed between left and right.
+
+Time and space
+
+Time: O(n)
+
+Space: O(1) (no extra memory)
+
+One-line difference to remember
+
+Array approach: Easy to think, uses extra space
+
+Pointer approach: Slightly tricky, but optimal and interview-preferred
+
+If you want, I can also:
+
+Draw a pointer diagram for the optimal approach
+
+Rewrite this explanation in exam-ready bullet points
+
+Convert it into a reusable template for similar problems
+
+Just tell me.
+
+Is this conversation helpful so far?
