@@ -1,0 +1,111 @@
+Step by step explanation (your logic only)
+Step 1: Count total nodes
+ListNode temp = head;
+int count = 0;
+while (temp != null) {
+    count++;
+    temp = temp.next;
+}
+
+
+Traverse the linked list.
+
+count stores the total number of nodes in the list.
+
+Example:
+
+List: 1 → 2 → 3 → 4 → 5
+count = 5
+
+Step 2: Convert nth-from-end to nth-from-start
+count = count - n + 1;
+
+
+You convert the problem to:
+Remove the countth node from the start
+
+Example:
+
+n = 2
+count = 5 - 2 + 1 = 4
+→ remove 4th node from start
+
+Step 3: Calculate previous node position
+int prvCnt = count - 1;
+
+
+prvCnt represents the position of the node just before the one to delete.
+
+Example:
+
+count = 4
+prvCnt = 3
+
+Step 4: Reset temp to head
+temp = head;
+
+
+You reuse temp to move again in the list.
+
+Step 5: Special case (remove head)
+if (count == n) {
+    return head.next;
+}
+
+
+If the node to remove is the first node, return head.next.
+
+This handles cases like removing the only node or removing the head.
+
+Step 6: Move temp to the target node
+while (count >= 0) {
+    temp = temp.next;
+    count--;
+}
+
+
+Moves temp forward so it points to the node after the node to be deleted.
+
+This helps later when reconnecting links.
+
+Step 7: Move prev to the previous node
+ListNode prev = head;
+while (prvCnt >= 0) {
+    prev = prev.next;
+    prvCnt--;
+}
+
+
+Moves prev to the node just before the target node.
+
+Step 8: Delete the node
+prev.next = temp.next;
+
+
+Skips the target node.
+
+Effectively removes it from the list.
+
+Step 9: Return updated head
+return head;
+
+
+The list is now updated correctly.
+
+Summary in simple words
+
+Count total nodes
+
+Convert nth-from-end to position-from-start
+
+Find previous node
+
+Skip the target node
+
+Return head
+
+Time and space complexity
+
+Time: O(n)
+
+Space: O(1)
