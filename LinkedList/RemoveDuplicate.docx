@@ -1,0 +1,128 @@
+Approach 1: Using HashSet + ArrayList (Extra space)
+Core idea
+
+First detect which values are duplicated, then rebuild a list using only values that appear exactly once.
+
+Step-by-step
+
+Create helper data structures
+
+set → stores values seen once
+
+check → stores values that appear more than once
+
+arr → stores values in order (no duplicates)
+
+ans → stores final valid values
+
+Traverse the linked list
+
+If value is not in set
+→ add it to arr and set
+
+If value is already in set
+→ add it to check (duplicate found)
+
+Filter unique values
+
+Traverse arr
+
+If value is not in check, add it to ans
+
+This removes all duplicated values completely
+
+Build a new linked list
+
+Create a dummy node
+
+For each value in ans
+
+Create a new node
+
+Link it using next
+
+Return the result
+
+Return dummy.next as the head of the new list
+
+Complexity
+
+Time: O(n)
+
+Space: O(n)
+
+Approach 2: Pure pointer-based (Optimal)
+Core idea
+
+Since the list is sorted, duplicates appear in groups. Skip entire groups directly by changing pointers.
+
+Step-by-step
+
+Create a dummy node
+
+Points to head
+
+Handles edge cases where duplicates start at the head
+
+Initialize a prev pointer
+
+prev always points to the last confirmed non-duplicate node
+
+Traverse the list
+
+While head is not null:
+
+Check if the current node and next node have the same value
+
+If duplicates are found
+
+Store the duplicate value
+
+Move head forward until all nodes with that value are skipped
+
+Connect prev.next to the first non-duplicate node
+
+If no duplicate
+
+Move prev forward
+
+Move head forward normally
+
+Return the result
+
+Return dummy.next
+
+Example walk-through
+
+Input:
+
+1 → 2 → 3 → 3 → 4 → 4 → 5
+
+
+Processing:
+
+1 → keep
+
+2 → keep
+
+3 → duplicate → remove all 3s
+
+4 → duplicate → remove all 4s
+
+5 → keep
+
+Output:
+
+1 → 2 → 5
+
+Complexity
+
+Time: O(n)
+
+Space: O(1)
+
+Key difference to remember
+
+HashSet approach: easier to think, uses extra memory
+
+Pointer approach: cleaner, faster, interview-preferred
