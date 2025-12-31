@@ -1,0 +1,182 @@
+1️⃣ First approach (commented code) – Repeated rotation
+
+This is the brute-force approach where you rotate the list one step at a time.
+
+What this approach tries to do
+
+Rotate the list to the right by 1, repeat that process k times.
+
+Step by step logic
+Step 1: Handle edge cases
+if (head == null || head.next == null || k == 0)
+
+
+Empty list → nothing to rotate
+
+One node → rotation changes nothing
+
+k == 0 → no rotation needed
+
+Step 2: Find the length of the list
+ListNode last = head;
+int length = 0;
+
+while (last != null) {
+    length++;
+    last = last.next;
+}
+
+
+Traverse the list
+
+Count total nodes
+
+This helps reduce unnecessary rotations
+
+Step 3: Reduce rotations
+int rotation = k % length;
+
+
+Rotating length times gives the same list
+
+So only rotate the remainder
+
+Step 4: Rotate one step at a time
+while (rotation > 0)
+
+
+Each loop does one right rotation.
+
+Step 5: Find last and second-last nodes
+last = head;
+while (last.next != null) {
+    last = last.next;
+}
+
+ListNode Slast = head;
+while (Slast.next.next != null) {
+    Slast = Slast.next;
+}
+
+
+last → last node
+
+Slast → second-last node
+
+Step 6: Perform one rotation
+last.next = head;
+Slast.next = null;
+head = last;
+
+
+Last node points to head
+
+Second-last becomes new end
+
+Last node becomes new head
+
+Step 7: Repeat
+
+Decrease rotation
+
+Continue until all rotations are done
+
+Complexity
+
+Time: O(n × k) ❌
+
+Space: O(1)
+
+This works, but it’s slow when k is large.
+
+2️⃣ Second approach (active code) – Optimized rotation
+
+This is the efficient and interview-ready solution.
+
+Core idea
+
+Instead of rotating many times:
+
+Make the list circular
+
+Break it at the correct point
+
+Step by step logic
+Step 1: Handle edge cases
+if (head == null || head.next == null || k == 0)
+
+
+Same reasoning as before.
+
+Step 2: Find length and last node
+ListNode last = head;
+int length = 1;
+
+while (last.next != null) {
+    last = last.next;
+    length++;
+}
+
+
+Traverse once
+
+Count nodes
+
+Keep reference to the last node
+
+Step 3: Reduce rotations
+k = k % length;
+if (k == 0) return head;
+
+
+Avoid unnecessary work
+
+If no effective rotation, return early
+
+Step 4: Make the list circular
+last.next = head;
+
+
+Now the list becomes a loop:
+
+1 → 2 → 3 → 4 → 5
+↑               ↓
+└───────────────┘
+
+Step 5: Find the new last node
+int stepsToNewHead = length - k;
+ListNode newLast = head;
+
+for (int i = 1; i < stepsToNewHead; i++) {
+    newLast = newLast.next;
+}
+
+
+Right rotation means the cut happens at length - k
+
+newLast stops just before the new head
+
+Step 6: Break the circle
+ListNode newHead = newLast.next;
+newLast.next = null;
+
+
+New head found
+
+Circular link removed
+
+Step 7: Return result
+return newHead;
+
+Complexity
+
+Time: O(n) ✅
+
+Space: O(1) ✅
+
+🔑 Key difference between both approaches
+Aspect	Brute Force	Optimized
+Rotations	One by one	Single cut
+Traversals	Many	One
+Time	O(n × k)	O(n)
+Interview quality	Average	Strong
