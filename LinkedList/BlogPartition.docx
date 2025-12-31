@@ -1,0 +1,62 @@
+Approach: Partition List using two dummy lists
+Goal
+
+Rearrange the linked list so that:
+
+Nodes with value less than x come first
+
+Nodes with value greater than or equal to x come after
+
+The relative order of nodes in each group remains unchanged
+
+Step 1: Create two dummy nodes
+
+Create one dummy node for values < x
+
+Create another dummy node for values ≥ x
+
+These dummy nodes act as temporary heads and simplify edge cases
+
+Step 2: Initialize pointers
+
+Use one pointer (small) to build the list of nodes < x
+
+Use another pointer (large) to build the list of nodes ≥ x
+
+Start both pointers at their respective dummy nodes
+
+Step 3: Traverse the original list
+
+Start from the head of the original list
+
+Visit each node exactly once
+
+Step 4: Partition nodes
+
+If the current node’s value is less than x, attach it to the small list
+
+Otherwise, attach it to the large list
+
+Move the corresponding pointer forward
+
+Step 5: Move to the next node
+
+Continue traversal until all nodes are processed
+
+Step 6: Terminate the large list
+
+Set large.next = null to avoid cycles
+
+Step 7: Connect both lists
+
+Attach the small list to the head of the large list
+
+Step 8: Return the new head
+
+Return the node after the small dummy node as the new head of the partitioned list
+
+Time and Space Complexity
+
+Time Complexity: O(n)
+
+Space Complexity: O(1)
