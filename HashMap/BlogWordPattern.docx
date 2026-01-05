@@ -1,0 +1,113 @@
+Approach 1: Manual splitting + two maps (your first solution)
+Step 1: Split the string s into words manually
+
+Traverse the string character by character.
+
+Build a word until you hit a space.
+
+Add each word to a list (list1).
+
+Example
+s = "dog cat cat dog"
+list1 = ["dog", "cat", "cat", "dog"]
+
+Step 2: Convert pattern characters into a list
+
+Traverse the pattern string.
+
+Convert each character into a string and store it in list2.
+
+Example
+pattern = "abba"
+list2 = ["a", "b", "b", "a"]
+
+Step 3: Check size mismatch
+
+If number of words ≠ number of pattern characters, return false.
+
+This avoids invalid mappings.
+
+Step 4: Use two HashMaps for one-to-one mapping
+
+mapST: word → pattern character
+
+mapTS: pattern character → word
+
+This ensures:
+
+One word maps to only one pattern character.
+
+One pattern character maps to only one word.
+
+Step 5: Traverse both lists together
+
+For each index:
+
+If a mapping already exists, verify it matches.
+
+If it doesn’t match, return false.
+
+If no mapping exists, create one.
+
+Step 6: Return true
+
+If all mappings are consistent, return true.
+
+Approach 2: Using split() + two maps (optimized solution)
+
+This is the recommended and interview-friendly approach.
+
+Step 1: Split string using built-in method
+
+Use s.split(" ") to directly get all words.
+
+Example
+s = "dog cat cat dog"
+words = ["dog", "cat", "cat", "dog"]
+
+Step 2: Check length mismatch
+
+If pattern.length() ≠ words.length, return false.
+
+This handles cases like:
+pattern = "abba"
+s = "dog cat cat"
+
+Step 3: Create two HashMaps
+
+map1: pattern character → word
+
+map2: word → pattern character
+
+This ensures bijection (one-to-one mapping).
+
+Step 4: Traverse pattern and words together
+
+For each index i:
+
+Get char c = pattern.charAt(i)
+
+Get String word = words[i]
+
+Step 5: Validate existing mappings
+
+If c already exists in map1, check if it maps to the same word.
+
+If word already exists in map2, check if it maps to the same character.
+
+If any check fails, return false.
+
+Step 6: Add new mappings
+
+If no mapping exists, store it in both maps.
+
+Step 7: Return true
+
+If the loop finishes without conflict, the pattern is valid.
+
+Key difference between the two approaches
+Aspect	Approach 1	Approach 2
+Word splitting	Manual	Built-in split()
+Code length	Longer	Short and clean
+Interview preference	Less	High
+Readability	Medium	Very good
