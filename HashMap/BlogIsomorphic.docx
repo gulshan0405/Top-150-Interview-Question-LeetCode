@@ -1,0 +1,55 @@
+Step 1: Check length of both strings
+
+If the lengths of s and t are not equal, return false because strings of different lengths cannot be isomorphic.
+
+Step 2: Create two HashMaps
+
+One HashMap to store character mapping from string s to string t
+
+Another HashMap to store character mapping from string t to string s
+
+This helps maintain a one-to-one relationship between characters.
+
+Step 3: Traverse both strings together
+
+Loop through the strings from index 0 to length - 1 and pick one character from each string at the same position.
+
+Step 4: Check mapping from s to t
+
+If the current character from s already exists in the map:
+
+Verify it maps to the same character in t
+
+If it maps to a different character, return false
+
+If it does not exist:
+
+Add the new mapping to the map
+
+Step 5: Check mapping from t to s
+
+If the current character from t already exists in the map:
+
+Verify it maps to the same character in s
+
+If it maps to a different character, return false
+
+If it does not exist:
+
+Add the new mapping to the map
+
+Step 6: Continue for all characters
+
+Repeat steps 4 and 5 for every character pair in both strings.
+
+Step 7: Return result
+
+If the loop completes without any mismatch, return true because the strings are isomorphic.
+
+Summary
+
+This approach ensures:
+
+Each character always maps to the same character
+
+No two characters map to the same character
