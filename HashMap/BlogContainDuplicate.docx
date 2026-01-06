@@ -1,0 +1,108 @@
+Approach 1: Using HashSet (Sliding Window)
+Idea
+
+Keep a window of size at most k and check if any duplicate appears inside that window.
+
+Step by step approach
+
+Initialize a HashSet to store elements of the current window.
+
+Use two pointers:
+
+i → start of the window
+
+j → end of the window
+
+Traverse the array using pointer j.
+
+If the window size becomes greater than k:
+
+Remove nums[i] from the set
+
+Move i forward by 1
+
+Check if nums[j] already exists in the set:
+
+If yes, return true because a duplicate exists within distance k
+
+Add nums[j] to the set.
+
+Move j forward and repeat.
+
+If the loop ends without finding duplicates, return false.
+
+Why this works
+
+The HashSet always contains elements from the last k indices only.
+If a number appears again inside this window, the index difference is guaranteed to be ≤ k.
+
+Time and Space Complexity
+
+Time: O(n)
+
+Space: O(k)
+
+Approach 2: Using HashMap (Index Tracking)
+Idea
+
+Store the last index of each number and compare the distance whenever it appears again.
+
+Step by step approach
+
+Create a HashMap to store:
+
+Key → number
+
+Value → last index where the number appeared
+
+Traverse the array from index 0 to n-1.
+
+For the current element:
+
+If it does not exist in the map:
+
+Store the number with its index
+
+If it already exists in the map:
+
+Get the previous index from the map
+
+Calculate the index difference
+
+If the difference is ≤ k:
+
+Return true
+
+If the difference is greater than k:
+
+Update the index of the number in the map
+
+Continue until the array ends.
+
+If no valid duplicate is found, return false.
+
+Why this works
+
+The HashMap ensures:
+
+Fast lookup of previous index
+
+Accurate distance calculation between duplicates
+
+Time and Space Complexity
+
+Time: O(n)
+
+Space: O(n)
+
+Short comparison
+Method	Data Structure	Key Idea
+HashSet	Sliding Window	Check duplicates within last k elements
+HashMap	Index Storage	Compare current index with last seen index
+Interview tip
+
+If asked which is better:
+
+Use HashSet for optimal space when k is small
+
+Use HashMap for clarity and simplicity
