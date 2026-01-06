@@ -1,4 +1,4 @@
-package Maths;
+
 
 public class trailingZero {
     //approach is right but limitation
