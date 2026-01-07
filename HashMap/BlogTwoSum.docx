@@ -1,0 +1,124 @@
+✅ Approach 1: Brute Force (Double Loop)
+Code:
+for (i = 0; i < n; i++) {
+    for (j = i + 1; j < n; j++) {
+        if (nums[i] + nums[j] == target) {
+            return new int[]{i, j};
+        }
+    }
+}
+return new int[]{-1, -1};
+
+Step-by-step:
+
+Loop through each element using i.
+
+For every element at i, check all elements that come after it with a second loop j = i + 1.
+
+Check if nums[i] + nums[j] == target.
+
+If yes → return the two indexes.
+
+If the loops finish and nothing matches → return {-1, -1}.
+
+Complexity:
+
+Time: O(n²)
+
+Space: O(1)
+
+✅ Approach 2: Two-Pass HashMap
+Codes:
+HashMap<Integer,Integer> map = new HashMap<>();
+for (int i = 0; i < n; i++) {
+    map.put(nums[i], i);
+}
+
+for (int i = 0; i < n; i++) {
+    int guess = target - nums[i];
+    if (map.containsKey(guess) && map.get(guess) != i) {
+        return new int[]{i, map.get(guess)};
+    }
+}
+return new int[]{-1,-1};
+
+Step-by-step:
+
+Create a HashMap to store:
+value → index
+
+First loop:
+Store every number along with its index.
+
+Second loop:
+
+For each element, compute guess = target - nums[i].
+
+Check if guess exists in the map.
+
+Make sure it’s not the same index by checking map.get(guess) != i.
+
+If found → return both indexes.
+
+If no match → return {-1, -1}.
+
+Complexity:
+
+Time: O(n)
+
+Space: O(n)
+
+✅ Approach 3: One-Pass HashMap (Optimal)
+Code:
+HashMap<Integer, Integer> map = new HashMap<>();
+
+for (int i = 0; i < nums.length; i++) {
+    int guess = target - nums[i];
+    if (map.containsKey(guess)) {
+        return new int[]{map.get(guess), i};
+    }
+    map.put(nums[i], i);
+}
+return new int[]{-1, -1};
+
+Step-by-step:
+
+Create an empty HashMap.
+
+Loop through the array:
+
+Calculate guess = target - nums[i].
+
+Check if guess is already in the map.
+
+If yes:
+
+You found the two numbers → return the stored index and the current index.
+
+If no:
+
+Add the current number to the map.
+
+Continue until you find a match.
+
+If no match exists → return {-1, -1}.
+
+Why this works:
+
+You are storing numbers seen so far.
+
+You are checking the required number before inserting the current one.
+
+This prevents using the same index twice.
+
+Complexity:
+
+Time: O(n)
+
+Space: O(n)
+
+🔥 Summary Table
+Approach	Technique	Time	Space	Notes
+1	Brute Force	O(n²)	O(1)	Slow, simplest
+2	Two-Pass HashMap	O(n)	O(n)	Needs two loops
+3	One-Pass HashMap	O(n)	O(n)	Best and cleanest
