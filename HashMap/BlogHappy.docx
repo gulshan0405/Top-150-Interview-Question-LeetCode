@@ -1,0 +1,64 @@
+Approach 1: Using HashSet (Cycle detection by remembering previous values)
+Step-by-step logic
+
+Start with the number n.
+
+Create an empty HashSet called set to store numbers you have already seen.
+
+Repeat the process:
+
+Take the current number.
+
+Split it into digits.
+
+Square each digit and add them up to get a new number.
+
+If the new number is 1, return true because it’s a happy number.
+
+If the new number is already in the HashSet, that means we are in a loop → return false.
+
+If it’s not in the set, add it and continue the process using this new number.
+
+Continue until you hit either 1 or a repeated number.
+
+Why it works
+
+A HashSet helps you check if a value has already appeared.
+
+If a value appears again, the chain is cycling and will never reach 1.
+
+Approach 2: Slow and Fast Pointer (Floyd’s Cycle Detection)
+Step-by-step logic
+
+Set two variables slow and fast, both equal to the original number.
+
+Move slow one step at a time:
+
+slow = sum of square of digits(slow)
+
+Move fast two steps at a time:
+
+fast = sum of square of digits(sum of square of digits(fast))
+
+Continue repeating the above steps until:
+
+slow == fast (cycle detected)
+
+After the loop:
+
+If the meeting point is 1, then it’s a happy number.
+
+If the meeting point is not 1, it means slow and fast pointers met inside a loop → return false.
+
+Why it works
+
+If there is a cycle, slow and fast pointers will eventually meet.
+
+If the only cycle is at 1, they meet at 1.
+
+Summary Table
+Approach	How cycle is found	When return true	When return false
+HashSet	Number repeats in set	Number becomes 1	Number repeats
+Slow/Fast pointer	slow meets fast	slow == fast == 1	slow == fast but not 1
+
+If you want, I can also draw a visual diagram to show how the loop works.
