@@ -1,0 +1,86 @@
+Spiral Order Approach (Step-by-Step)
+
+You are walking around the matrix in layers, starting from the outer layer and moving inward.
+To do this, you keep track of four boundaries:
+
+top → starting row
+
+bottom → ending row
+
+left → starting column
+
+right → ending column
+
+At each stage, you move in four directions:
+
+1. Traverse from left to right
+
+You walk along the top row from column left to right.
+
+for (int i = left; i <= right; i++)
+
+
+After printing the top row, you move the top boundary down:
+
+top++;
+
+2. Traverse from top to bottom
+
+You walk down the rightmost column from row top to bottom.
+
+for (int i = top; i <= bottom; i++)
+
+
+Then move the right boundary left:
+
+right--;
+
+3. Traverse from right to left
+
+Before doing this step, you check if rows remain:
+
+if (top <= bottom)
+
+
+Then walk the bottom row from column right to left.
+
+for (int i = right; i >= left; i--)
+
+
+Move the bottom boundary up:
+
+bottom--;
+
+4. Traverse from bottom to top
+
+Before this step, check if columns remain:
+
+if (left <= right)
+
+
+Then walk up the leftmost column from row bottom to top.
+
+for (int i = bottom; i >= top; i--)
+
+
+Move left boundary to the right:
+
+left++;
+
+5. Repeat While There Is Space
+
+The loop continues while:
+
+top <= bottom && left <= right
+
+
+This ensures you do not cross over the boundaries.
+
+Summary of the Logic
+Step	Direction	Row/Column used
+1	Left → Right	top row
+2	Top → Bottom	right column
+3	Right → Left	bottom row
+4	Bottom → Top	left column
+
+After each step, you shrink the boundary so the next loop handles the inner layer.
