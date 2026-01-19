@@ -1,0 +1,103 @@
+✅ Approach 1: In-place Rotation using Transpose + Reverse
+
+(This is the optimal and standard solution for rotating a matrix 90 degrees clockwise.)
+
+Step 1: Transpose the matrix
+
+Transpose means swapping rows and columns.
+
+For every i < j, swap:
+
+matrix[i][j] <-> matrix[j][i]
+
+
+After this step:
+
+The matrix elements above the diagonal move below,
+
+And the elements below move above.
+
+Step 2: Reverse each row
+
+Once transposed, each row is reversed.
+
+For each row:
+
+Swap first and last
+
+Swap second and second-last
+
+Continue until pointers meet
+
+This completes the rotation.
+
+Why this works
+
+Transpose rearranges the matrix into a mirrored version.
+Reversing rows rotates it into the final 90° clockwise orientation.
+
+✅ Approach 2: Your second approach using extra array (contain + rotatedMat)
+
+This method is correct but uses extra space. Let’s break it down step by step.
+
+Step 1: Store all matrix elements into a 1D array
+
+You create a 1D array contain:
+
+contain[k] = matrix[i][j];
+
+
+This flattens the matrix row by row.
+
+For example:
+
+1 2
+3 4
+
+
+becomes:
+
+contain = [1, 2, 3, 4]
+
+Step 2: Refill values into a new rotated matrix
+
+You create a new matrix:
+
+int[][] rotatedMat = new int[m][n];
+
+
+Then you fill it like this:
+
+for (i from m-1 to 0)
+    for (j from 0 to n-1)
+        rotatedMat[j][i] = contain[k]
+
+
+This repositions values as if rotating clockwise.
+
+Step 3: Copy rotatedMat back into original matrix
+
+Finally you overwrite the original matrix:
+
+matrix[i][j] = rotatedMat[i][j];
+
+
+Now the original matrix contains the rotated version.
+
+🆚 Comparison of Both Approaches
+Feature	Transpose + Reverse	Extra Array Approach
+Space	O(1) extra space	O(n²) extra space
+Speed	Efficient	Slightly slower
+In-place?	Yes	No
+Simplicity	Simple once understood	More steps
+✅ Recommendation
+
+Use transpose + reverse for interviews and LeetCode since it’s:
+
+Simple
+
+Clean
+
+In-place
+
+Most optimized
