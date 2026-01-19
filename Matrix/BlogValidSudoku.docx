@@ -1,0 +1,155 @@
+✅ Approach 1: Using 3 separate checks (Row, Column, Box)
+
+This part of your code is commented out, but let’s break down how it works.
+
+Step 1: Validate each row
+
+Loop from row 0 to 8.
+
+Use a fresh HashSet<Character> for each row.
+
+For each column in that row:
+
+Skip '.'.
+
+If the number already exists in the set → invalid.
+
+Otherwise add it.
+
+This ensures there is no duplicate in any row.
+
+Step 2: Validate each column
+
+Loop from column 0 to 8.
+
+Use a fresh HashSet<Character> for the column.
+
+For each row in that column:
+
+Skip '.'.
+
+If duplicate found, return false.
+
+This checks each column for duplicates.
+
+Step 3: Validate each 3x3 box
+
+A Sudoku grid has 9 boxes, each starting at:
+
+(0,0) (0,3) (0,6)
+(3,0) (3,3) (3,6)
+(6,0) (6,3) (6,6)
+
+
+Loop over boxes by stepping rows: sr = 0,3,6
+
+Loop over boxes by stepping columns: sc = 0,3,6
+
+Create a HashSet for the box.
+
+For each cell inside the 3x3 area:
+
+Skip dot
+
+Check for duplicates
+
+Add number to set
+
+If any duplicate appears, return false.
+
+Step 4 : If all checks pass
+
+Return true.
+
+✅ Approach 2: Using a Single HashSet to Track All Rules
+
+(This is the shorter and cleaner version you kept active.)
+
+Main idea
+
+Instead of maintaining 3 separate sets for row, column, and box, you create one global set and store unique strings that represent rules.
+
+Example stored values:
+
+"5 in row 3"
+"5 in col 4"
+"5 in box 1-0"
+
+
+If any of these appear again, the board is invalid.
+
+Step-by-Step Breakdown
+Step 1: Initialize a set
+Set<String> set = new HashSet<>();
+
+
+This will store unique validation tags.
+
+Step 2: Traverse entire board
+
+Two nested loops:
+
+for (i = 0; i < 9; i++)
+    for (j = 0; j < 9; j++)
+
+
+You visit every cell.
+
+Step 3: Skip empty cells
+if (board[i][j] == '.') continue;
+
+
+Empty cells do not cause conflicts.
+
+Step 4: Create identifiers
+
+For each filled cell:
+
+char num = board[i][j];
+
+
+Now build identifiers:
+
+Row identifier
+num + " in row " + i
+
+Column identifier
+num + " in col " + j
+
+Box identifier
+
+Box index is determined by dividing row and column by 3:
+
+num + " in box " + (i/3) + "-" + (j/3)
+
+Step 5: Check if any identifier already exists
+
+If the number is already present in the same row, column, or box:
+
+if (set.contains(row) || set.contains(col) || set.contains(box))
+    return false;
+
+
+Immediate failure.
+
+Step 6: Add the identifiers to the set
+set.add(row);
+set.add(col);
+set.add(box);
+
+
+This helps catch duplicates later.
+
+Step 7: If no conflicts found
+
+After scanning entire grid:
+
+return true;
+
+
+Board is valid.
+
+🟢 Summary of Both Approaches
+Approach	How it works	Pros	Cons
+3 separate checks	Check row, column, box separately	Clear logic	More code
+Single HashSet	Use strings to track all rules	Short, clean, fast	Slightly more memory for strings
