@@ -1,0 +1,120 @@
+🧠 Problem Goal
+
+If any cell in the matrix is 0, then:
+
+Set the entire row of that cell to 0
+
+Set the entire column of that cell to 0
+
+✅ Step-by-Step Approach
+Step 1: Store matrix size
+int m = matrix.length;
+int n = matrix[0].length;
+
+
+m = number of rows
+
+n = number of columns
+
+Step 2: Create marker arrays
+boolean[] row = new boolean[m];
+boolean[] col = new boolean[n];
+
+
+These arrays are used to remember:
+
+which rows contain at least one 0
+
+which columns contain at least one 0
+
+Initially:
+
+All values are false (no row/column marked)
+
+Step 3: Scan the matrix
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        if (matrix[i][j] == 0) {
+            row[i] = true;
+            col[j] = true;
+        }
+    }
+}
+
+
+What happens here:
+
+Traverse every cell in the matrix
+
+If a 0 is found at position (i, j):
+
+Mark row[i] = true → row i must be zeroed
+
+Mark col[j] = true → column j must be zeroed
+
+So now:
+
+row[] contains all rows that need to be zero
+
+col[] contains all columns that need to be zero
+
+Step 4: Modify the matrix
+for (int i = 0; i < m; i++) {
+    for (int j = 0; j < n; j++) {
+        if (row[i] || col[j]) {
+            matrix[i][j] = 0;
+        }
+    }
+}
+
+
+Now:
+
+Again traverse every cell
+
+If:
+
+row i is marked OR
+
+column j is marked
+
+Then set matrix[i][j] = 0
+
+This ensures:
+
+All required rows are zero
+
+All required columns are zero
+
+⏱ Time Complexity
+
+First scan: O(m × n)
+
+Second scan: O(m × n)
+
+Total: O(m × n)
+
+💾 Space Complexity
+
+row[] array → O(m)
+
+col[] array → O(n)
+
+Total extra space: O(m + n)
+
+🧩 Why this works
+
+You don’t modify the matrix while scanning, which prevents accidental propagation of zeros.
+Instead, you:
+
+First record positions
+
+Then apply changes safely
+
+🟢 Summary in simple terms
+
+Remember which rows and columns contain 0
+
+Loop again
+
+Set those rows and columns to 0
